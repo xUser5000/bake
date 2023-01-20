@@ -12,7 +12,6 @@
 class Tokenizer {
 public:
     explicit Tokenizer(std::istream &in);
-    bool hasMoreTokens();
     Token getNextToken();
     int getLineNumber();
 
