@@ -8,13 +8,14 @@
 #include <string>
 #include <regex>
 
-enum TokenType { INVALID_TOKEN, IDENTIFIER, COLON, ENDLINE, TAB, WHITE_SPACE};
+enum TokenType { INVALID_TOKEN, IDENTIFIER, COLON, ENDLINE, TAB, COMMAND, WHITE_SPACE};
 
 const std::pair<TokenType, std::regex> patterns[] = {
         {IDENTIFIER, std::regex("^[\\w-_]+")},
         {COLON, std::regex("^:")},
         {ENDLINE, std::regex("^\\n")},
         {TAB, std::regex("^\\t")},
+        {COMMAND, std::regex("^\".+\"")},
         {WHITE_SPACE, std::regex("^[ ]+")}
 };
 

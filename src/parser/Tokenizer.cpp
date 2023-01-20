@@ -20,6 +20,7 @@ Token Tokenizer::getNextToken() {
         index_ = 0;
     }
     std::string s = cur_line_.substr(index_);
+
     std::smatch matches;
     for (const auto& p: patterns) {
         if (std::regex_search(s, matches, p.second)) {

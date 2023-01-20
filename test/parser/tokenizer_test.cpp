@@ -7,7 +7,7 @@
 #include "parser/Tokenizer.h"
 
 TEST(TokenizerTest, BasicScriptWithoutWhiteSpaces) {
-    std::string test_string = "target:dependency\n\trecipe";
+    std::string test_string = "target:dependency\n\t\"recipe\"";
     std::stringstream ss(test_string);
     auto *tokenizer = new Tokenizer(ss);
     Token token;
@@ -30,8 +30,8 @@ TEST(TokenizerTest, BasicScriptWithoutWhiteSpaces) {
     ASSERT_EQ(token.getType(), TAB);
 
     token = tokenizer->getNextToken();
-    ASSERT_EQ(token.getContent(), "recipe");
-    ASSERT_EQ(token.getType(), IDENTIFIER);
+    ASSERT_EQ(token.getContent(), "\"recipe\"");
+    ASSERT_EQ(token.getType(), COMMAND);
 
     token = tokenizer->getNextToken();
     ASSERT_EQ(token.getType(), ENDLINE);
@@ -41,7 +41,7 @@ TEST(TokenizerTest, BasicScriptWithoutWhiteSpaces) {
 }
 
 TEST(TokenizerTest, BasicScriptWithWhiteSpaces) {
-    std::string test_string = "target  :dependency     \n\trecipe";
+    std::string test_string = "target  :dependency     \n\t\"recipe\"";
     std::stringstream ss(test_string);
     auto *tokenizer = new Tokenizer(ss);
     Token token;
