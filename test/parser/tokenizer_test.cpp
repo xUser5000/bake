@@ -39,3 +39,29 @@ TEST(TokenizerTest, BasicScriptWithoutWhiteSpaces) {
     token = tokenizer->getNextToken();
     ASSERT_EQ(token.getType(), INVALID_TOKEN);
 }
+
+TEST(TokenizerTest, BasicScriptWithWhiteSpaces) {
+    std::string test_string = "target  :dependency     \n\trecipe";
+    std::stringstream ss(test_string);
+    auto *tokenizer = new Tokenizer(ss);
+    Token token;
+    token = tokenizer->getNextToken();
+    ASSERT_EQ(token.getContent(), "target");
+    ASSERT_EQ(token.getType(), IDENTIFIER);
+
+    token = tokenizer->getNextToken();
+    ASSERT_EQ(token.getContent(), "  ");
+    ASSERT_EQ(token.getType(), WHITE_SPACE);
+
+    token = tokenizer->getNextToken();
+    ASSERT_EQ(token.getContent(), ":");
+    ASSERT_EQ(token.getType(), COLON);
+
+    token = tokenizer->getNextToken();
+    ASSERT_EQ(token.getContent(), "dependency");
+    ASSERT_EQ(token.getType(), IDENTIFIER);
+
+    token = tokenizer->getNextToken();
+    ASSERT_EQ(token.getContent(), "     ");
+    ASSERT_EQ(token.getType(), WHITE_SPACE);
+}
