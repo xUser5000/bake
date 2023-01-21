@@ -65,3 +65,31 @@ TEST(TokenizerTest, BasicScriptWithWhiteSpaces) {
     ASSERT_EQ(token.getContent(), "     ");
     ASSERT_EQ(token.getType(), WHITE_SPACE);
 }
+
+TEST(TokenizerTest, SkipWhiteSpace) {
+    std::string test_string = "target  :dependency     \n\t\"recipe\"";
+    std::stringstream ss(test_string);
+    auto *tokenizer = new Tokenizer(ss);
+    Token token;
+    token = tokenizer->getNextToken();
+    ASSERT_EQ(token.getContent(), "target");
+    ASSERT_EQ(token.getType(), IDENTIFIER);
+
+    tokenizer->skipWhiteSpace();
+
+    token = tokenizer->getNextToken();
+    ASSERT_EQ(token.getContent(), ":");
+    ASSERT_EQ(token.getType(), COLON);
+
+    tokenizer->skipWhiteSpace();
+
+    token = tokenizer->getNextToken();
+    ASSERT_EQ(token.getContent(), "dependency");
+    ASSERT_EQ(token.getType(), IDENTIFIER);
+
+    tokenizer->skipWhiteSpace();
+
+    token = tokenizer->getNextToken();
+    ASSERT_EQ(token.getContent(), "\n");
+    ASSERT_EQ(token.getType(), ENDLINE);
+}

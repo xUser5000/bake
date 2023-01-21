@@ -32,6 +32,12 @@ Token Tokenizer::getNextToken() {
     return Token();
 }
 
+void Tokenizer::skipWhiteSpace() {
+    while (index_ < (int) cur_line_.size() && cur_line_[index_] == ' ') {
+        index_++;
+    }
+}
+
 int Tokenizer::getLineNumber() {
     return line_number_;
 }
