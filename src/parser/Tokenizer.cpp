@@ -16,7 +16,6 @@ Token Tokenizer::getNextToken() {
             return Token();
         }
         cur_line_ += '\n';
-        line_number_++;
         index_ = 0;
     }
     std::string s = cur_line_.substr(index_);
@@ -24,12 +23,19 @@ Token Tokenizer::getNextToken() {
     std::smatch matches;
     for (const auto& p: patterns) {
         if (std::regex_search(s, matches, p.second)) {
-            index_ += (int) matches[0].length();
             return Token(matches[0], p.first);
         }
     }
 
     return Token();
+}
+
+Token Tokenizer::getNextTokenAndAdvanceCursor() {
+    Token t = getNextToken();
+    if (t.getType() != INVALID_TOKEN) {
+        index_ += (int) t.getContent().size();
+    }
+    return t;
 }
 
 void Tokenizer::skipWhiteSpace() {
