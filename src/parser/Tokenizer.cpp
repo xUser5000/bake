@@ -23,25 +23,12 @@ Token Tokenizer::getNextToken() {
     std::smatch matches;
     for (const auto& p: patterns) {
         if (std::regex_search(s, matches, p.second)) {
+            index_ += (int) matches[0].length();
             return Token(matches[0], p.first);
         }
     }
 
     return Token();
-}
-
-Token Tokenizer::getNextTokenAndAdvanceCursor() {
-    Token t = getNextToken();
-    if (t.getType() != INVALID_TOKEN) {
-        index_ += (int) t.getContent().size();
-    }
-    return t;
-}
-
-void Tokenizer::skipWhiteSpace() {
-    while (index_ < (int) cur_line_.size() && cur_line_[index_] == ' ') {
-        index_++;
-    }
 }
 
 int Tokenizer::getLineNumber() {

@@ -13,8 +13,6 @@ class Tokenizer {
 public:
     explicit Tokenizer(std::istream &in);
     Token getNextToken();
-    Token getNextTokenAndAdvanceCursor();
-    void skipWhiteSpace();
     int getLineNumber();
 
 private:

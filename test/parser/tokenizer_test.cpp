@@ -11,32 +11,32 @@ TEST(TokenizerTest, BasicScriptWithoutWhiteSpaces) {
     std::stringstream ss(test_string);
     auto *tokenizer = new Tokenizer(ss);
     Token token;
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getContent(), "target");
     ASSERT_EQ(token.getType(), IDENTIFIER);
 
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getContent(), ":");
     ASSERT_EQ(token.getType(), COLON);
 
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getContent(), "dependency");
     ASSERT_EQ(token.getType(), IDENTIFIER);
 
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getType(), ENDLINE);
 
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getType(), TAB);
 
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getContent(), "\"recipe\"");
     ASSERT_EQ(token.getType(), COMMAND);
 
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getType(), ENDLINE);
 
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getType(), INVALID_TOKEN);
 }
 
@@ -45,51 +45,23 @@ TEST(TokenizerTest, BasicScriptWithWhiteSpaces) {
     std::stringstream ss(test_string);
     auto *tokenizer = new Tokenizer(ss);
     Token token;
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getContent(), "target");
     ASSERT_EQ(token.getType(), IDENTIFIER);
 
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getContent(), "  ");
     ASSERT_EQ(token.getType(), WHITE_SPACE);
 
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getContent(), ":");
     ASSERT_EQ(token.getType(), COLON);
 
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getContent(), "dependency");
     ASSERT_EQ(token.getType(), IDENTIFIER);
 
-    token = tokenizer->getNextTokenAndAdvanceCursor();
+    token = tokenizer->getNextToken();
     ASSERT_EQ(token.getContent(), "     ");
     ASSERT_EQ(token.getType(), WHITE_SPACE);
-}
-
-TEST(TokenizerTest, SkipWhiteSpace) {
-    std::string test_string = "target  :dependency     \n\t\"recipe\"";
-    std::stringstream ss(test_string);
-    auto *tokenizer = new Tokenizer(ss);
-    Token token;
-    token = tokenizer->getNextTokenAndAdvanceCursor();
-    ASSERT_EQ(token.getContent(), "target");
-    ASSERT_EQ(token.getType(), IDENTIFIER);
-
-    tokenizer->skipWhiteSpace();
-
-    token = tokenizer->getNextTokenAndAdvanceCursor();
-    ASSERT_EQ(token.getContent(), ":");
-    ASSERT_EQ(token.getType(), COLON);
-
-    tokenizer->skipWhiteSpace();
-
-    token = tokenizer->getNextTokenAndAdvanceCursor();
-    ASSERT_EQ(token.getContent(), "dependency");
-    ASSERT_EQ(token.getType(), IDENTIFIER);
-
-    tokenizer->skipWhiteSpace();
-
-    token = tokenizer->getNextTokenAndAdvanceCursor();
-    ASSERT_EQ(token.getContent(), "\n");
-    ASSERT_EQ(token.getType(), ENDLINE);
 }
