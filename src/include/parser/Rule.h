@@ -11,25 +11,26 @@
 class Rule {
 public:
     Rule() = default;
-    Rule(const std::string &target, const std::string &dependency,
-         const std::string &recipe) : target_(target), dependency_(dependency), recipe_(recipe) {}
+
+    Rule(const std::string &target, const std::vector<std::string> &dependencies,
+         const std::vector<std::string> &recipes) : target_(target), dependencies_(dependencies), recipes_(recipes) {}
 
     const std::string &getTarget() const { return target_; }
 
     void setTarget(const std::string &target) { target_ = target; }
 
-    const std::string &getDependency() const { return dependency_; }
+    const std::vector<std::string> &getDependencies() const { return dependencies_; }
 
-    void setDependency(const std::string &dependency) { dependency_ = dependency; }
+    void setDependencies(const std::vector<std::string> &dependencies) { dependencies_ = dependencies; }
 
-    const std::string &getRecipe() const { return recipe_; }
+    const std::vector<std::string> &getRecipes() const { return recipes_; }
 
-    void setRecipe(const std::string &recipe) { recipe_ = recipe; }
+    void setRecipes(const std::vector<std::string> &recipes) { recipes_ = recipes; }
 
 private:
     std::string target_;
-    std::string dependency_;
-    std::string recipe_;
+    std::vector<std::string> dependencies_;
+    std::vector<std::string> recipes_;
 };
 
 #endif //BAKE_RULE_H

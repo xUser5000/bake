@@ -10,16 +10,6 @@
 #include "parser/Tokenizer.h"
 #include "parser/Rule.h"
 
-/*
- * Script
- *  : Rule
- *  ;
- *
- * Rule
- *  : Target ":" Dependency "\n" "\t" Recipe
- *  ;
- * */
-
 class Parser {
 public:
     Parser(std::istream &in);
@@ -32,10 +22,13 @@ private:
     Rule rule();
     std::string target();
     std::string colon();
-    std::string dependency();
+    std::vector<std::string> dependencyList();
     std::string endLine();
     std::string tab();
+    std::vector<std::string> recipeList();
+    std::string dependency();
     std::string recipe();
+    bool optionalWhiteSpace();
 
     Token lookahead_;
     Tokenizer *tokenizer_;
