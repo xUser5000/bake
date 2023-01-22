@@ -18,7 +18,8 @@ public:
 private:
     Token consume(TokenType token_type);
 
-    Rule script();
+    std::vector<Rule> script();
+    std::vector<Rule> ruleList();
     Rule rule();
     std::string target();
     std::string colon();
@@ -29,6 +30,7 @@ private:
     std::string dependency();
     std::string recipe();
     bool optionalWhiteSpace();
+    bool optionalLineBreaks();
 
     Token lookahead_;
     Tokenizer *tokenizer_;

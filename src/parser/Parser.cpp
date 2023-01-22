@@ -8,9 +8,7 @@ Parser::Parser(std::istream &in) { tokenizer_ = new Tokenizer(in); }
 
 std::vector<Rule> Parser::getRules() {
     lookahead_ = tokenizer_->getNextToken();
-    std::vector<Rule> rules;
-    rules.push_back(script());
-    return rules;
+    return script();
 }
 
 Token Parser::consume(TokenType token_type) {
@@ -22,8 +20,18 @@ Token Parser::consume(TokenType token_type) {
     return res;
 }
 
-Rule Parser::script() {
-    return rule();
+std::vector<Rule> Parser::script() {
+    optionalLineBreaks();
+    return ruleList();
+}
+
+std::vector<Rule> Parser::ruleList() {
+    std::vector<Rule> rules;
+    while (lookahead_.getType() != INVALID_TOKEN) {
+        rules.push_back(rule());
+        optionalLineBreaks();
+    }
+    return rules;
 }
 
 Rule Parser::rule() {
@@ -88,3 +96,13 @@ bool Parser::optionalWhiteSpace() {
     }
     return false;
 }
+
+bool Parser::optionalLineBreaks() {
+    bool res = false;
+    while (lookahead_.getType() == ENDLINE) {
+        res = true;
+        consume(ENDLINE);
+    }
+    return res;
+}
+

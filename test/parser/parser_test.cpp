@@ -52,3 +52,26 @@ TEST(ParserTest, InvalidScript) {
     ASSERT_THROW(parser->getRules(), std::runtime_error);
 
 }
+
+TEST(ParserTest, MultipleRules) {
+    Rule r1("target1", std::vector<std::string>({"dependency1"}), std::vector<std::string>({"recipe1"}));
+    Rule r2("target2", std::vector<std::string>({"dependency2"}), std::vector<std::string>({"recipe2", "recipe3"}));
+
+    std::string s1 = "target1:dependency1\n\t\"recipe1\"\n";
+    std::string s2 = "target2:dependency2\n\t\"recipe2\"\n\t\"recipe3\"";
+    std::stringstream ss(s1 + s2);
+    auto parser = new Parser(ss);
+    std::vector<Rule> res = parser->getRules();
+    ASSERT_EQ((int) res.size(), 2);
+    ASSERT_EQ(res[0], r1);
+    ASSERT_EQ(res[1], r2);
+
+    s1 = "\n\ntarget1:dependency1\n\t\"recipe1\"\n\n\n";
+    s2 = "target2:dependency2\n\t\"recipe2\"\n\t\"recipe3\"\n\n";
+    ss = std::stringstream(s1 + s2);
+    parser = new Parser(ss);
+    res = parser->getRules();
+    ASSERT_EQ((int) res.size(), 2);
+    ASSERT_EQ(res[0], r1);
+    ASSERT_EQ(res[1], r2);
+}

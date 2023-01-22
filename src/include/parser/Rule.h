@@ -12,20 +12,30 @@ class Rule {
 public:
     Rule() = default;
 
-    Rule(const std::string &target, const std::vector<std::string> &dependencies,
-         const std::vector<std::string> &recipes) : target_(target), dependencies_(dependencies), recipes_(recipes) {}
+    Rule(std::string target, std::vector<std::string> dependencies,
+         std::vector<std::string> recipes) : target_(target), dependencies_(dependencies), recipes_(recipes) {}
 
-    const std::string &getTarget() const { return target_; }
+    bool operator==(const Rule &rhs) const {
+        return target_ == rhs.target_ &&
+               dependencies_ == rhs.dependencies_ &&
+               recipes_ == rhs.recipes_;
+    }
 
-    void setTarget(const std::string &target) { target_ = target; }
+    bool operator!=(const Rule &rhs) const {
+        return !(rhs == *this);
+    }
 
-    const std::vector<std::string> &getDependencies() const { return dependencies_; }
+    std::string getTarget() { return target_; }
 
-    void setDependencies(const std::vector<std::string> &dependencies) { dependencies_ = dependencies; }
+    void setTarget(std::string target) { target_ = target; }
 
-    const std::vector<std::string> &getRecipes() const { return recipes_; }
+    std::vector<std::string> getDependencies() { return dependencies_; }
 
-    void setRecipes(const std::vector<std::string> &recipes) { recipes_ = recipes; }
+    void setDependencies(std::vector<std::string> dependencies) { dependencies_ = dependencies; }
+
+    std::vector<std::string> getRecipes() { return recipes_; }
+
+    void setRecipes(std::vector<std::string> recipes) { recipes_ = recipes; }
 
 private:
     std::string target_;
