@@ -1,6 +1,7 @@
 # add subdirectories here
 add_subdirectory(parser)
 add_subdirectory(graph)
+add_subdirectory(runner)
 add_subdirectory(common)
 
 add_library(bake STATIC ${ALL_OBJECT_FILES})
