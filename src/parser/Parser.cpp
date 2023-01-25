@@ -31,6 +31,9 @@ std::vector<Rule> Parser::ruleList() {
         rules.push_back(rule());
         optionalLineBreaks();
     }
+    if (rules.empty()) {
+        throw std::runtime_error("bake: No rules provided\n");
+    }
     return rules;
 }
 

@@ -76,6 +76,12 @@ TEST(ParserTest, MultipleRules) {
     ASSERT_EQ(res[1], r2);
 }
 
+TEST(ParserTest, NoRules) {
+    std::stringstream ss("");
+    Parser parser(ss);
+    ASSERT_THROW(parser.getRules(), std::runtime_error);
+}
+
 TEST(ParserTest, NoDependencies) {
     std::stringstream ss("target : \n\t\"recipe1\"\n\t\"recipe2\"");
     Parser parser(ss);
