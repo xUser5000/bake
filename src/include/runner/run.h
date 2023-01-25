@@ -8,8 +8,8 @@
 #include <vector>
 #include <string>
 
-int run(std::string &command);
+int run(std::string command);
 
-void run(std::vector<std::string> &commands);
+int run(std::vector<std::string> commands);
 
 #endif //BAKE_RUN_H
