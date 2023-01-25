@@ -43,6 +43,9 @@ Rule Parser::rule() {
     r.setDependencies(dependencyList());
     endLine();
     r.setRecipes(recipeList());
+    if (r.getDependencies().empty() && r.getRecipes().empty()) {
+        throw std::runtime_error("bake: No dependencies or recipe provided for target" + r.getTarget());
+    }
     return r;
 }
 

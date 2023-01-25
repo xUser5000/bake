@@ -93,3 +93,9 @@ TEST(ParserTest, NoRecipes) {
     ASSERT_EQ(res[0].getDependencies(), std::vector<std::string>({"dependency1", "dependency2"}));
     ASSERT_TRUE(res[0].getRecipes().empty());
 }
+
+TEST(ParserTest, NoDependenciesNoRules) {
+    std::stringstream ss("target : ");
+    Parser parser(ss);
+    ASSERT_THROW(parser.getRules(), std::runtime_error);
+}
