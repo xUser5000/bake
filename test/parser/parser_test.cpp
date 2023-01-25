@@ -75,3 +75,21 @@ TEST(ParserTest, MultipleRules) {
     ASSERT_EQ(res[0], r1);
     ASSERT_EQ(res[1], r2);
 }
+
+TEST(ParserTest, NoDependencies) {
+    std::stringstream ss("target : \n\t\"recipe1\"\n\t\"recipe2\"");
+    Parser parser(ss);
+    std::vector<Rule> res = parser.getRules();
+    ASSERT_EQ(res[0].getTarget(), "target");
+    ASSERT_TRUE(res[0].getDependencies().empty());
+    ASSERT_EQ(res[0].getRecipes(), std::vector<std::string>({"recipe1", "recipe2"}));
+}
+
+TEST(ParserTest, NoRecipes) {
+    std::stringstream ss("target : dependency1 dependency2 \n");
+    Parser parser(ss);
+    std::vector<Rule> res = parser.getRules();
+    ASSERT_EQ(res[0].getTarget(), "target");
+    ASSERT_EQ(res[0].getDependencies(), std::vector<std::string>({"dependency1", "dependency2"}));
+    ASSERT_TRUE(res[0].getRecipes().empty());
+}
