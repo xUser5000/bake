@@ -41,7 +41,6 @@ Rule Parser::rule() {
     colon();
     optionalWhiteSpace();
     r.setDependencies(dependencyList());
-    optionalWhiteSpace();
     endLine();
     r.setRecipes(recipeList());
     return r;
@@ -53,13 +52,9 @@ std::string Parser::colon() { return consume(COLON).getContent(); }
 
 std::vector<std::string> Parser::dependencyList() {
     std::vector<std::string> list;
-    list.push_back(dependency());
-    while (optionalWhiteSpace()) {
-        if (lookahead_.getType() == IDENTIFIER) {
-            list.push_back(dependency());
-        } else {
-            break;
-        }
+    while (lookahead_.getType() == IDENTIFIER) {
+        list.push_back(dependency());
+        optionalWhiteSpace();
     }
     return list;
 }

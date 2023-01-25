@@ -30,7 +30,7 @@ TEST(ParserTest, BasicScriptWithWhiteSpaces) {
     ASSERT_EQ(rule.getRecipes()[0], "recipe");
 }
 
-TEST(TokenizerTest, MultipleDependenciesAndMultipleRecipes) {
+TEST(ParserTest, MultipleDependenciesAndMultipleRecipes) {
     std::string test_string = "target  :dependency1 dependency2    \n\t\"recipe1\" \n\t\"recipe2\"";
     std::stringstream ss(test_string);
 
