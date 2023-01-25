@@ -17,7 +17,7 @@ public:
     void setChildren(const std::string &node, const std::vector<std::string> &children);
     std::vector<std::string> getChildren(const std::string &node);
     bool isCyclic();
-    std::vector<std::string> topologicalOrder(std::string &root_node);
+    std::vector<std::string> topologicalOrder(std::string root_node);
 
 private:
     bool isCyclic(const std::string &cur_node, std::map<std::string, int> &mark);

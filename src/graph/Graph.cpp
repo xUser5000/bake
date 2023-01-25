@@ -48,7 +48,7 @@ bool Graph::isCyclic(const std::string &cur_node, std::map<std::string, int> &ma
     return ans;
 }
 
-std::vector<std::string> Graph::topologicalOrder(std::string &root_node) {
+std::vector<std::string> Graph::topologicalOrder(std::string root_node) {
     std::vector<std::string> order;
     std::map<std::string, int> mark;
     topologicalOrder(root_node, mark, order);
@@ -58,7 +58,7 @@ std::vector<std::string> Graph::topologicalOrder(std::string &root_node) {
 void Graph::topologicalOrder(std::string &cur_node, std::map<std::string, int> &mark, std::vector<std::string> &list) {
     for (std::string &child: adj_list_[cur_node]) {
         if (mark[child] == 0) {
-            topologicalOrder(cur_node, mark, list);
+            topologicalOrder(child, mark, list);
         }
     }
     mark[cur_node] = 1;
