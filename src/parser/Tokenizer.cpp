@@ -17,6 +17,7 @@ Token Tokenizer::getNextToken() {
         }
         cur_line_ += '\n';
         index_ = 0;
+        line_number_++;
     }
     std::string s = cur_line_.substr(index_);
 
