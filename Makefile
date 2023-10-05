@@ -34,9 +34,14 @@ $(BDIR)/%.o: $(SDIR)/%.c $(DEPS)
 # testing
 test: $(TESTS)
 
-$(BDIR)/%: $(TDIR)/%.c $(OBJ) $(DEPS)
+$(BDIR)/%: test_dummy $(TDIR)/%.c $(OBJ) $(DEPS)
 	$(CC) -o $@ $(TDIR)/$*.c $(OBJ) $(CFLAGS) $(LIBS)
 	$(BDIR)/$*
+
+# dummy rule to mark test targets out-of-date everytime they run
+.PHONY: test_dummy
+test_dummy:
+	@true
 
 # clean the build directory
 .PHONY: clean
