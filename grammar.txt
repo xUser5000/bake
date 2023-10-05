@@ -1,0 +1,30 @@
+This is a representation of the currently supported grammar in BakeFile scripts.
+It's written in informal backus naur form (BNF).
+See: https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form
+
+
+Script
+    : OptionalLineBreaks RuleList
+    ;
+
+RuleList
+    : Rule
+    | Rule OptionalLineBreaks RuleList
+
+Rule
+    : Target OptionalWhiteSpace Colon OptionalWhiteSpace DependencyList OptionalWhiteSpace EndLine Tab RecipeList
+    ;
+
+DependencyList
+    : Dependency
+    | Dependency OptionalWhiteSpace DependencyList
+    ;
+
+RecipeList
+    : Recipe
+    | Recipe EndLine RecipeList
+    ;
+
+Recipe
+    : " COMMAND "
+    ;
