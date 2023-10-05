@@ -18,8 +18,6 @@ OBJ = $(patsubst %,$(BDIR)/%,$(_OBJ))
 _TESTS=test_tokenizer
 TESTS=$(patsubst %,$(BDIR)/%,$(_TESTS))
 
-$(info $$var is [${TESTS}])
-
 # mkdir the build directory when Makefile is parsed
 $(shell mkdir -p $(BDIR))
 
