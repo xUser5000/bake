@@ -16,13 +16,12 @@ DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))
 _OBJ=tokenizer.o
 OBJ = $(patsubst %,$(BDIR)/%,$(_OBJ))
 
-_TESTS=test_tokenizer
-TESTS=$(patsubst %,$(BDIR)/%,$(_TESTS))
+TESTS=test_tokenizer
 
 # add -g flag if "DEBUG" argument is passed
 ifeq ($(DEBUG), true)
 	CFLAGS += -g
-	BDIR = DDIR
+	BDIR = $(DDIR)
 endif
 
 # mkdir the build directory when Makefile is parsed
@@ -41,9 +40,9 @@ $(BDIR)/%.o: $(SDIR)/%.c $(DEPS)
 # testing
 test: $(TESTS)
 
-$(BDIR)/%: test_dummy $(TDIR)/%.c $(OBJ) $(DEPS)
-	$(CC) -o $@ $(TDIR)/$*.c $(OBJ) $(CFLAGS) $(LIBS)
-	$(BDIR)/$*
+test_%: test_dummy $(TDIR)/test_%.c $(OBJ) $(DEPS)
+	$(CC) -o $(BDIR)/$@ $(TDIR)/$@.c $(OBJ) $(CFLAGS) $(LIBS)
+	$(BDIR)/$@
 
 # dummy rule to mark test targets out-of-date everytime they run
 .PHONY: test_dummy
