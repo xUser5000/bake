@@ -52,5 +52,5 @@ test_dummy:
 # clean the build directory
 .PHONY: clean
 clean:
-	rm -f $(BDIR)/*
-	rm -f $(DDIR)/*
+	rm -rf $(BDIR)
+	rm -rf $(DDIR)
