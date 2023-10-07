@@ -26,7 +26,7 @@ tokenizer_t* tokenizer_init(FILE *in) {
 token_t* tokenizer_read_token(tokenizer_t *tokenizer) {
     if (tokenizer->index == tokenizer->line_size) {
         size_t rv = getline(&tokenizer->cur_line, &tokenizer->line_size, tokenizer->in);
-        if (rv == -1) return NULL;
+        if (rv == -1) return token_init(NULL, NULL_TOKEN);
         tokenizer->line_size = rv;
         tokenizer->line_number++;
         tokenizer->index = 0;
