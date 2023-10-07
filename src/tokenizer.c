@@ -65,3 +65,5 @@ token_t* tokenizer_read_token(tokenizer_t *tokenizer) {
 }
 
 int tokenizer_get_line_number(tokenizer_t *tokenizer) { return tokenizer->line_number; }
+
+int tokenizer_get_index(tokenizer_t *tokenizer) { return tokenizer->index; }

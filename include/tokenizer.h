@@ -28,3 +28,5 @@ tokenizer_t* tokenizer_init(FILE *in);
 token_t* tokenizer_read_token(tokenizer_t *tokenizer);
 
 int tokenizer_get_line_number(tokenizer_t *tokenizer);
+
+int tokenizer_get_index(tokenizer_t *tokenizer);
