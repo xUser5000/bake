@@ -11,10 +11,10 @@ typedef struct tokenizer_t {
 } tokenizer_t;
 
 typedef enum token_type_t {
-    INVALID_TOKEN, IDENTIFIER, COLON, ENDLINE, TAB, COMMAND, WHITE_SPACE
+    NULL_TOKEN, INVALID_TOKEN, IDENTIFIER, COLON, ENDLINE, TAB, COMMAND, WHITE_SPACE
 } token_type_t;
 
-#define TOKENS_TYPES_CNT 7
+#define TOKENS_TYPES_CNT 8
 
 typedef struct token_t {
     char *content;

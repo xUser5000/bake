@@ -4,7 +4,7 @@
 #include "tokenizer.h"
 
 
-const char *TOKEN_PATTERNS[] = {NULL, "^[\\w-_.]+", "^:", "^\\n", "^\\t", "^\".+\"", "^[ ]+"};
+const char *TOKEN_PATTERNS[] = {NULL, NULL, "^[\\w-_.]+", "^:", "^\\n", "^\\t", "^\".+\"", "^[ ]+"};
 
 token_t* token_init(char *content, token_type_t type) {
     token_t *token = (token_t*) malloc(sizeof(token_t));
@@ -32,7 +32,7 @@ token_t* tokenizer_read_token(tokenizer_t *tokenizer) {
         tokenizer->index = 0;
     }
 
-    for (int i = 1; i < TOKENS_TYPES_CNT; i++) {
+    for (int i = 2; i < TOKENS_TYPES_CNT; i++) {
         const char* error;
         int error_offset;
 
