@@ -5,6 +5,7 @@ EXEC=bake
 
 SDIR=src
 BDIR=build
+DDIR=build-debug
 TDIR=test
 
 LIBS=-lm -lpcre
@@ -17,6 +18,12 @@ OBJ = $(patsubst %,$(BDIR)/%,$(_OBJ))
 
 _TESTS=test_tokenizer
 TESTS=$(patsubst %,$(BDIR)/%,$(_TESTS))
+
+# add -g flag if "DEBUG" argument is passed
+ifeq ($(DEBUG), true)
+	CFLAGS += -g
+	BDIR = DDIR
+endif
 
 # mkdir the build directory when Makefile is parsed
 $(shell mkdir -p $(BDIR))
@@ -47,4 +54,4 @@ test_dummy:
 .PHONY: clean
 clean:
 	rm -f $(BDIR)/*
-
+	rm -f $(DDIR)/*
