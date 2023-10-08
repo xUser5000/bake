@@ -20,13 +20,18 @@ tokenizer_t* tokenizer_init(FILE *in) {
     tokenizer->line_size = getline(&tokenizer->cur_line, &tokenizer->line_size, tokenizer->in);
     tokenizer->line_number = 0;
     tokenizer->index = 0;
+    tokenizer->done = 0;
     return tokenizer;
 }
 
 token_t* tokenizer_read_token(tokenizer_t *tokenizer) {
+    if (tokenizer->done) return token_init(NULL, NULL_TOKEN);
     if (tokenizer->index == tokenizer->line_size) {
         size_t rv = getline(&tokenizer->cur_line, &tokenizer->line_size, tokenizer->in);
-        if (rv == -1) return token_init(NULL, NULL_TOKEN);
+        if (rv == -1) {
+            tokenizer->done = 1;
+            return token_init("\n", ENDLINE);
+        }
         tokenizer->line_size = rv;
         tokenizer->line_number++;
         tokenizer->index = 0;

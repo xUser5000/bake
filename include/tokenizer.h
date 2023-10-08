@@ -8,6 +8,7 @@ typedef struct tokenizer_t {
     size_t line_size;
     int line_number;
     int index;
+    int done;
 } tokenizer_t;
 
 typedef enum token_type_t {

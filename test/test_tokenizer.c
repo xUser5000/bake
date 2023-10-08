@@ -12,8 +12,11 @@ UTEST_MAIN();
     ASSERT_STREQ(token->content, token_content); \
     ASSERT_EQ(token->type, token_type); }
 
-#define ASSERT_TOKEN_NULL(tokenizer) \
-    ASSERT_EQ(tokenizer_read_token(tokenizer), NULL)
+#define ASSERT_TOKEN_NULL(tokenizer) {                          \
+    token_t *token = tokenizer_read_token(tokenizer);           \
+    ASSERT_EQ(token->content, NULL);                            \
+    ASSERT_EQ(token->type, NULL_TOKEN);                         \
+}
 
 
 UTEST(Tokenizer, BasicScriptWithoutWhiteSpaces) {
@@ -27,6 +30,7 @@ UTEST(Tokenizer, BasicScriptWithoutWhiteSpaces) {
     ASSERT_TOKEN_EQ(tokenizer, "\n", ENDLINE);
     ASSERT_TOKEN_EQ(tokenizer, "\t", TAB);
     ASSERT_TOKEN_EQ(tokenizer, "\"recipe\"", COMMAND);
+    ASSERT_TOKEN_EQ(tokenizer, "\n", ENDLINE);
     ASSERT_TOKEN_NULL(tokenizer);
 }
 
@@ -45,5 +49,6 @@ UTEST(Tokenizer, BasicScriptWithWhiteSpaces) {
     ASSERT_TOKEN_EQ(tokenizer, "\n", ENDLINE);
     ASSERT_TOKEN_EQ(tokenizer, "\t", TAB);
     ASSERT_TOKEN_EQ(tokenizer, "\"recipe\"", COMMAND);
+    ASSERT_TOKEN_EQ(tokenizer, "\n", ENDLINE);
     ASSERT_TOKEN_NULL(tokenizer);
 }
