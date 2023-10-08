@@ -10,10 +10,10 @@ TDIR=test
 
 LIBS=-lm -lpcre
 
-_DEPS=tokenizer.h list.h
+_DEPS=tokenizer.h list.h e4c_lite.h
 DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ=tokenizer.o list.o
+_OBJ=tokenizer.o list.o e4c_lite.o
 OBJ = $(patsubst %,$(BDIR)/%,$(_OBJ))
 
 TESTS=test_tokenizer test_list
