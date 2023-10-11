@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
     FILE *makefile = fopen(makefile_path, "r");
     tokenizer_t *tokenizer = tokenizer_init(makefile);
     token_t *token;
-    while ((token = tokenizer_read_token(tokenizer)) != NULL) {
+    while ((token = tokenizer_read_token(tokenizer))->type != NULL_TOKEN) {
         if (token->type == INVALID_TOKEN) {
             printf("Undefined token %s at %d:%d\n",
                     token->content,
@@ -25,8 +25,9 @@ int main(int argc, char* argv[]) {
                     tokenizer->index + 1);
             exit(1);
         }
+        printf("%d %s\n", token->type, token->content);
     }
-    printf("Bakefile compiled Successfully.\n");
+    printf("Bakefile executed Successfully.\n");
 
     fclose(makefile);
 
