@@ -10,7 +10,7 @@ TDIR=test
 
 LIBS=-lm -lpcre
 
-_DEPS=tokenizer.h list.h rule.h parser.h e4c_lite.h map.h
+_DEPS=common.h tokenizer.h list.h rule.h parser.h e4c_lite.h map.h
 DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))
 
 _OBJ=tokenizer.o list.o rule.o parser.o e4c_lite.o map.o

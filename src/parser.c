@@ -58,7 +58,7 @@ list_t* script(parser_t *parser) {
 list_t* rule_list(parser_t *parser) {
     list_t *rules = list_init();
     while (parser->lookahead->type != NULL_TOKEN && parser->lookahead->type != INVALID_TOKEN) {
-        list_push(rules, (void*) rule(parser));
+        list_push_back(rules, (void*) rule(parser));
         optional_line_breaks(parser);
     }
     if (list_size(rules) == 0) {
@@ -89,7 +89,7 @@ char* colon(parser_t *parser) { return consume(parser, COLON)->content; }
 list_t* prerequisite_list(parser_t *parser) {
     list_t *list = list_init();
     while (parser->lookahead->type == IDENTIFIER) {
-        list_push(list, (void*) prerequisite(parser));
+        list_push_back(list, (void*) prerequisite(parser));
         optional_white_space(parser);
     }
     return list;
@@ -105,7 +105,7 @@ list_t* command_list(parser_t *parser) {
     list_t *list = list_init();
     while (parser->lookahead->type == TAB) {
         tab(parser);
-        list_push(list, (void*) command(parser));
+        list_push_back(list, (void*) command(parser));
         optional_white_space(parser);
         endline(parser);
     }

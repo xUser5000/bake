@@ -1,5 +1,11 @@
 #pragma once
 
+#include "e4c_lite.h"
+
+
+E4C_DECLARE_EXCEPTION(ListException);
+E4C_DECLARE_EXCEPTION(EmptyListException);
+
 typedef struct node_t {
     void *val;
     struct node_t *prev;
@@ -20,9 +26,13 @@ node_t* node_init(void *val, node_t *next, node_t* prev);
 
 list_t* list_init();
 
-void list_push(list_t *list, void *val);
+void list_push_back(list_t *list, void *val);
 
-void list_pop(list_t *list);
+void list_pop_back(list_t *list);
+
+void list_push_front(list_t *list, void *val);
+
+void list_pop_front(list_t *list);
 
 size_t list_size(list_t *list);
 

@@ -31,7 +31,7 @@ void map_set(map_t *map, char *key, void *value) {
             return;
         }
     }
-    list_push(map->list, pair_init(key, value));
+    list_push_back(map->list, pair_init(key, value));
 }
 
 void* map_get(map_t *map, char *key) {
