@@ -7,4 +7,5 @@ rule_t* rule_init() {
     rule->target = NULL;
     rule->prerequisites = NULL;
     rule->commands = NULL;
+    return rule;
 }
