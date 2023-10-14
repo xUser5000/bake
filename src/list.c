@@ -76,6 +76,10 @@ size_t list_size(list_t *list) {
     return list->size;
 }
 
+int list_is_empty(list_t *list) {
+    return list->size == 0;
+}
+
 list_itr_t* list_itr_init(list_t *list) {
     list_itr_t *itr = (list_itr_t*) malloc(sizeof(list_itr_t));
     itr->cur = list->head;
