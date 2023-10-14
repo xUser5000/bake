@@ -24,25 +24,33 @@ map_t *map_init(void) {
 
 void map_set(map_t *map, char *key, void *value) {
     list_itr_t *it = list_itr_init(map->list);
+    int found = 0;
     while (list_itr_has_next(it)) {
         pair_t *pair = (pair_t*) list_itr_next(it);
         if (strcmp(pair->key, key) == 0) {
             pair->value = value;
-            return;
+            found = 1;
+            break;
         }
     }
-    list_push_back(map->list, pair_init(key, value));
+    if (!found) {
+        list_push_back(map->list, pair_init(key, value));
+    }
+    list_itr_free(it);
 }
 
 void* map_get(map_t *map, char *key) {
     list_itr_t *it = list_itr_init(map->list);
+    void* ret = NULL;
     while (list_itr_has_next(it)) {
         pair_t *pair = (pair_t*) list_itr_next(it);
         if (strcmp(pair->key, key) == 0) {
-            return pair->value;
+            ret = pair->value;
+            break;
         }
     }
-    return NULL;
+    list_itr_free(it);
+    return ret;
 }
 
 list_t *map_keys(map_t *map) {
@@ -52,5 +60,11 @@ list_t *map_keys(map_t *map) {
         pair_t *pair = (pair_t*) list_itr_next(it);
         list_push_back(keys, pair->key);
     }
+    list_itr_free(it);
     return keys;
+}
+
+void map_free(map_t *map) {
+    list_free(map->list, 1);
+    free(map);
 }

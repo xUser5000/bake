@@ -18,6 +18,8 @@ UTEST(Map, MapSet) {
     ASSERT_EQ(*(int*)map_get(map, "key1"), 30);
     map_set(map, "key4", &value1);
     ASSERT_EQ(*(int*)map_get(map, "key4"), 10);
+
+    map_free(map);
 }
 
 UTEST(Map, MapGet) {
@@ -32,17 +34,21 @@ UTEST(Map, MapGet) {
     ASSERT_EQ(*(int*)map_get(map, "key2"), 20);
     ASSERT_EQ(*(int*)map_get(map, "key3"), 30);
     ASSERT_EQ(map_get(map, "key4"), NULL);
+
+    map_free(map);
 }
 
 UTEST(Map, MapSetNull) {
     map_t *map = map_init();
     map_set(map, "key1", NULL);
     ASSERT_EQ(map_get(map, "key1"), NULL);
+    map_free(map);
 }
 
 UTEST(Map, MapGetNull) {
     map_t *map = map_init();
     ASSERT_EQ(map_get(map, "key1"), NULL);
+    map_free(map);
 }
 
 UTEST(Map, MapSetEmptyKey) {
@@ -50,11 +56,13 @@ UTEST(Map, MapSetEmptyKey) {
     int value1 = 10;
     map_set(map, "", &value1);
     ASSERT_EQ(map_get(map, ""), &value1);
+    map_free(map);
 }
 
 UTEST(Map, MapGetEmptyKey) {
     map_t *map = map_init();
     ASSERT_EQ(map_get(map, ""), NULL);
+    map_free(map);
 }
 
 UTEST(Map, MapSetDuplicateKey) {
@@ -64,6 +72,7 @@ UTEST(Map, MapSetDuplicateKey) {
     map_set(map, "key1", &value1);
     map_set(map, "key1", &value2);
     ASSERT_EQ(*(int*)map_get(map, "key1"), 20);
+    map_free(map);
 }
 
 UTEST(Map, MapSetMultipleValues) {
@@ -77,6 +86,7 @@ UTEST(Map, MapSetMultipleValues) {
     ASSERT_EQ(*(int*)map_get(map, "key1"), 10);
     ASSERT_EQ(*(int*)map_get(map, "key2"), 20);
     ASSERT_EQ(*(int*)map_get(map, "key3"), 30);
+    map_free(map);
 }
 
 UTEST(Map, MapSetAndGetStrings) {
@@ -90,6 +100,7 @@ UTEST(Map, MapSetAndGetStrings) {
     ASSERT_EQ(strcmp((char*)map_get(map, "key1"), "value1"), 0);
     ASSERT_EQ(strcmp((char*)map_get(map, "key2"), "value2"), 0);
     ASSERT_EQ(strcmp((char*)map_get(map, "key3"), "value3"), 0);
+    map_free(map);
 }
 
 UTEST(Map, MapSetAndGetStructs) {
@@ -110,4 +121,5 @@ UTEST(Map, MapSetAndGetStructs) {
     ASSERT_EQ(((struct my_struct*)map_get(map, "key2"))->b, 4);
     ASSERT_EQ(((struct my_struct*)map_get(map, "key3"))->a, 5);
     ASSERT_EQ(((struct my_struct*)map_get(map, "key3"))->b, 6);
+    map_free(map);
 }

@@ -6,6 +6,7 @@
     for (i = 0; i < sz; i++) {                              \
         ASSERT_STREQ((char*) list_itr_next(itr), arr[i]);   \
     }                                                       \
+    list_itr_free(itr);                                     \
 }
 
 #define ASSERT_THROWS(code, exception) {                    \
