@@ -10,13 +10,13 @@ TDIR=test
 
 LIBS=-lm -lpcre
 
-_DEPS=common.h tokenizer.h list.h rule.h parser.h e4c_lite.h map.h
+_DEPS=common.h tokenizer.h list.h rule.h parser.h e4c_lite.h map.h graph.h
 DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ=tokenizer.o list.o rule.o parser.o e4c_lite.o map.o
+_OBJ=tokenizer.o list.o rule.o parser.o e4c_lite.o map.o graph.o
 OBJ = $(patsubst %,$(BDIR)/%,$(_OBJ))
 
-TESTS=test_tokenizer test_list test_parser test_map
+TESTS=test_tokenizer test_list test_parser test_map test_graph
 
 # add -g flag if "DEBUG" argument is passed
 ifeq ($(DEBUG), true)
