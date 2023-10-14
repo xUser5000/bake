@@ -1,8 +1,8 @@
-#define ASSERT_LIST_EQ(list1, arr) {                        \
+#define ASSERT_LIST_EQ(list, arr) {                         \
     size_t sz = sizeof(arr) / sizeof(arr[0]);               \
-    ASSERT_EQ(list_size(list1), sz);                        \
+    ASSERT_EQ(list_size(list), sz);                         \
     size_t i;                                               \
-    list_itr_t *itr = list_itr_init(list1);                 \
+    list_itr_t *itr = list_itr_init(list);                  \
     for (i = 0; i < sz; i++) {                              \
         ASSERT_STREQ((char*) list_itr_next(itr), arr[i]);   \
     }                                                       \
