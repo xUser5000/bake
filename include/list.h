@@ -38,8 +38,12 @@ size_t list_size(list_t *list);
 
 int list_is_empty(list_t *list);
 
+void list_free(list_t *list, int free_vals);
+
 list_itr_t* list_itr_init(list_t *list);
 
 int list_itr_has_next(list_itr_t *itr);
 
 void* list_itr_next(list_itr_t *itr);
+
+void list_itr_free(list_itr_t *itr);

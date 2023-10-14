@@ -39,10 +39,13 @@ void list_pop_back(list_t *list) {
         E4C_THROW(EmptyListException, NULL);
     }
     if (list->size == 1) {
+        free(list->head);
         list->head = NULL;
         list->tail = NULL;
     } else {
         list->tail = list->tail->prev;
+        free(list->tail->next);
+        list->tail->next = NULL;
     }
     list->size--;
 }
@@ -64,10 +67,13 @@ void list_pop_front(list_t *list) {
         E4C_THROW(EmptyListException, NULL);
     }
     if (list->size == 1) {
+        free(list->head);
         list->head = NULL;
         list->tail = NULL;
     } else {
         list->head = list->head->next;
+        free(list->head->prev);
+        list->head->prev = NULL;
     }
     list->size--;
 }
@@ -78,6 +84,17 @@ size_t list_size(list_t *list) {
 
 int list_is_empty(list_t *list) {
     return list->size == 0;
+}
+
+void list_free(list_t *list, int free_vals) {
+    node_t *cur = list->head;
+    while (cur != NULL) {
+        node_t *tmp = cur;
+        cur = cur->next;
+        if (free_vals) free(tmp->val);
+        free(tmp);
+    }
+    free(list);
 }
 
 list_itr_t* list_itr_init(list_t *list) {
@@ -94,4 +111,8 @@ void* list_itr_next(list_itr_t *itr) {
     void *ret = itr->cur->val;
     itr->cur = itr->cur->next;
     return ret;
+}
+
+void list_itr_free(list_itr_t *itr) {
+    free(itr);
 }

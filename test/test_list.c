@@ -23,6 +23,9 @@ UTEST(List, ListPushBack) {
         ASSERT_EQ(list_itr_next(it), (void*) i);
     }
     ASSERT_FALSE(list_itr_has_next(it));
+
+    list_itr_free(it);
+    list_free(list, 0);
 }
 
 UTEST(List, ListPopBack) {
@@ -40,6 +43,8 @@ UTEST(List, ListPopBack) {
     ASSERT_EQ(list->tail, NULL);
 
     ASSERT_THROWS(list_pop_back(list), EmptyListException);
+    
+    list_free(list, 0);
 }
 
 UTEST(List, ListPushFront) {
@@ -59,6 +64,9 @@ UTEST(List, ListPushFront) {
         ASSERT_EQ(list_itr_next(it), (void*) i);
     }
     ASSERT_FALSE(list_itr_has_next(it));
+    
+    list_itr_free(it);
+    list_free(list, 0);
 }
 
 UTEST(List, ListPopFront) {
@@ -76,4 +84,6 @@ UTEST(List, ListPopFront) {
     ASSERT_EQ(list->tail, NULL);
 
     ASSERT_THROWS(list_pop_front(list), EmptyListException);
+    
+    list_free(list, 0);
 }
