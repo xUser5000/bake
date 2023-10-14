@@ -44,3 +44,13 @@ void* map_get(map_t *map, char *key) {
     }
     return NULL;
 }
+
+list_t *map_keys(map_t *map) {
+    list_t *keys = list_init();
+    list_itr_t *it = list_itr_init(map->list);
+    while (list_itr_has_next(it)) {
+        pair_t *pair = (pair_t*) list_itr_next(it);
+        list_push_back(keys, pair->key);
+    }
+    return keys;
+}

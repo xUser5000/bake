@@ -11,3 +11,5 @@ map_t *map_init();
 void map_set(map_t *map, char *key, void *value);
 
 void *map_get(map_t *map, char *key);
+
+list_t *map_keys(map_t *map);
