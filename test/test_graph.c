@@ -11,7 +11,10 @@ UTEST(Graph, AddEdge) {
     graph_add_edge(g, "a", "c");
 
     char* children[] = {"b", "c"};
-    ASSERT_LIST_EQ(graph_get_children(g, "a"), children);
+    list_t *children_list = graph_get_children(g, "a");
+    ASSERT_LIST_EQ(children_list, children);
+
+    graph_free(g);
 }
 
 UTEST(Graph, TopoOrder) {
@@ -30,4 +33,7 @@ UTEST(Graph, TopoOrder) {
 
     ASSERT_EQ(list_size(order), 7);
     ASSERT_LIST_EQ(order, expected_order);
+
+    list_free(order, 0);
+    graph_free(g);
 }
