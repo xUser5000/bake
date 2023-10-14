@@ -14,7 +14,7 @@ node_t* node_init(void *val, node_t *prev, node_t *next) {
     return node;
 }
 
-list_t* list_init() {
+list_t* list_init(void) {
     list_t *list = (list_t*) malloc(sizeof(list_t));
     list->head = NULL;
     list->tail = NULL;

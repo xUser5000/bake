@@ -6,8 +6,8 @@ typedef struct tokenizer_t {
     FILE *in;
     char *cur_line;
     size_t line_size;
-    int line_number;
-    int index;
+    size_t line_number;
+    size_t index;
     int done;
 } tokenizer_t;
 

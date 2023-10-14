@@ -24,7 +24,7 @@ typedef struct list_itr_t {
 
 node_t* node_init(void *val, node_t *next, node_t* prev);
 
-list_t* list_init();
+list_t* list_init(void);
 
 void list_push_back(list_t *list, void *val);
 

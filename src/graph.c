@@ -4,7 +4,7 @@
 #include "list.h"
 #include "map.h"
 
-graph_t* graph_init() {
+graph_t* graph_init(void) {
     graph_t *graph = malloc(sizeof(graph_t));
     graph->adj = map_init();
     return graph;
@@ -44,7 +44,7 @@ list_t* graph_topo_order(graph_t *graph) {
                 map_set(indegree, v, 0);
             }
             long in = (long) map_get(indegree, v);
-            map_set(indegree, v, (void*) in+1);
+            map_set(indegree, v, (void*) (in+1));
         }
     }
 
@@ -71,7 +71,7 @@ list_t* graph_topo_order(graph_t *graph) {
         while (list_itr_has_next(children_itr)) {
             char *child = (char*) list_itr_next(children_itr);
             long in = (long) map_get(indegree, child);
-            map_set(indegree, child, (void*) in-1);
+            map_set(indegree, child, (void*) (in-1));
             if ((long) map_get(indegree, child) == 0) {
                 list_push_back(queue, child);
             }

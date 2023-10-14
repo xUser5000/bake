@@ -16,7 +16,7 @@ pair_t* pair_init(char *key, void *value) {
     return pair;
 }
 
-map_t *map_init() {
+map_t *map_init(void) {
     map_t *map = (map_t*) malloc(sizeof(map_t));
     map->list = list_init();
     return map;

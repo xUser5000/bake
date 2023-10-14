@@ -1,6 +1,11 @@
 IDIR=include
 CC=gcc
 CFLAGS=-I$(IDIR)
+CFLAGS_EXTRA=-Wall -Wextra -Wpedantic \
+	-Wformat=2 -Wno-unused-parameter -Wshadow \
+	-Wwrite-strings -Wstrict-prototypes -Wold-style-definition \
+	-Wredundant-decls -Wnested-externs -Wmissing-include-dirs \
+	-Wjump-misses-init -Wlogical-op
 EXEC=bake
 
 SDIR=src
@@ -31,11 +36,11 @@ all: $(EXEC)
 
 # build executable
 $(EXEC): $(SDIR)/main.c $(OBJ)
-	$(CC) -o $(BDIR)/$@ $^ $(CFLAGS) $(LIBS)
+	$(CC) -o $(BDIR)/$@ $^ $(CFLAGS) $(CFLAGS_EXTRA) $(LIBS)
 
 # build object files from source files
 $(BDIR)/%.o: $(SDIR)/%.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIBS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(CFLAGS_EXTRA) $(LIBS)
 
 # testing
 test: $(TESTS)

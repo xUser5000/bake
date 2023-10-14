@@ -7,7 +7,7 @@ typedef struct graph_t {
     map_t *adj;    
 } graph_t;
 
-graph_t* graph_init();
+graph_t* graph_init(void);
 
 void graph_add_edge(graph_t *graph, char *u, char *v);
 

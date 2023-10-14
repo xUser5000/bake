@@ -8,4 +8,4 @@ typedef struct rule_t {
     list_t *commands;
 } rule_t;
 
-rule_t* rule_init();
+rule_t* rule_init(void);

@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
     token_t *token;
     while ((token = tokenizer_read_token(tokenizer))->type != NULL_TOKEN) {
         if (token->type == INVALID_TOKEN) {
-            printf("Undefined token %s at %d:%d\n",
+            printf("Undefined token %s at %zu:%zu\n",
                     token->content,
                     tokenizer->line_number + 1,
                     tokenizer->index + 1);
