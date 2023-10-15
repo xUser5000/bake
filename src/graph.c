@@ -11,6 +11,12 @@ graph_t* graph_init(void) {
     return graph;
 }
 
+void graph_add_node(graph_t *graph, char *node) {
+    if (map_get(graph->adj, node) == NULL) {
+        map_set(graph->adj, node, list_init());
+    }
+}
+
 void graph_add_edge(graph_t *graph, char *u, char *v) {
     if (map_get(graph->adj, u) == NULL) {
         map_set(graph->adj, u, list_init());

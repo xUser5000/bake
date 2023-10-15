@@ -9,6 +9,8 @@ typedef struct graph_t {
 
 graph_t* graph_init(void);
 
+void graph_add_node(graph_t *graph, char *node);
+
 void graph_add_edge(graph_t *graph, char *u, char *v);
 
 list_t* graph_get_children(graph_t *graph, char *u);

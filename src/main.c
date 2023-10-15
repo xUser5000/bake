@@ -41,6 +41,7 @@ int main(int argc, char* argv[]) {
         rule_t *rule = list_itr_next(rules_itr);
 
         map_set(target_to_rule, rule->target, rule);
+        graph_add_node(graph, rule->target);
         
         list_itr_t *pre_itr = list_itr_init(rule->prerequisites);
         while (list_itr_has_next(pre_itr)) {
