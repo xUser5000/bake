@@ -7,24 +7,15 @@
 #include "graph.h"
 
 int main(int argc, char* argv[]) {
-    char *bakefile_path = NULL;
-
-    if (argc == 1) {
-        bakefile_path = strcpy(bakefile_path, "Bakefile");
-    }
-
-    if (argc == 2) {
-        bakefile_path = argv[1];
-    }
-
     if (argc > 2) {
         printf("bake: too many arguments!\n");
         exit(1);
     }
 
+    const char *bakefile_path = "Bakefile";
     FILE *makefile = fopen(bakefile_path, "r");
     if (makefile == NULL) {
-        printf("bake: no such file: %s", bakefile_path);
+        printf("bake: Baekfile not found\n");
         exit(1);
     }
 
@@ -50,8 +41,9 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // execute targets in topological order
-    list_t *order = graph_topo_order(graph);
+    // execute target and its prerequisites in topological order
+    char *root_target = (argc == 2) ? argv[1] : ((rule_t*) rules->head->val)->target;
+    list_t *order = graph_topo_order(graph, root_target);
     list_itr_t *order_itr = list_itr_init(order);
     while (list_itr_has_next(order_itr)) {
         char *target = list_itr_next(order_itr);
