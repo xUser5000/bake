@@ -29,11 +29,9 @@ UTEST(Graph, TopoOrder) {
     graph_add_edge(g, "f", "g");
 
     char* expected_order[] = {"a", "b", "c", "d", "e", "f", "g"};
-    list_t *order = graph_topo_order(g);
+    list_t *order = graph_topo_order(g, "g");
 
     ASSERT_EQ(list_size(order), 7);
     ASSERT_LIST_EQ(order, expected_order);
 
-    list_free(order, 0);
-    graph_free(g);
 }
