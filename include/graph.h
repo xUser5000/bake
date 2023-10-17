@@ -15,6 +15,8 @@ void graph_add_edge(graph_t *graph, char *u, char *v);
 
 list_t* graph_get_children(graph_t *graph, char *u);
 
+int graph_has_cycle(graph_t *graph);
+
 list_t* graph_topo_order(graph_t *graph, char *root);
 
 void graph_free(graph_t *graph);

@@ -41,6 +41,12 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // if graph has a cycle, report and exit
+    if (graph_has_cycle(graph)) {
+      printf("bake: dependency graph has a cycle!\n");
+      exit(1);
+    }
+
     // execute target and its prerequisites in topological order
     char *root_target = (argc == 2) ? argv[1] : ((rule_t*) rules->head->val)->target;
     list_t *order = graph_topo_order(graph, root_target);

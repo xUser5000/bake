@@ -17,6 +17,20 @@ UTEST(Graph, AddEdge) {
     graph_free(g);
 }
 
+UTEST(Graph, HasCycle) {
+  graph_t *g = graph_init();
+  graph_add_edge(g, "a", "b");
+  graph_add_edge(g, "b", "c");
+  graph_add_edge(g, "c", "a");
+  ASSERT_TRUE(graph_has_cycle(g));
+
+  g = graph_init();
+  graph_add_edge(g, "a", "b");
+  graph_add_edge(g, "b", "c");
+  graph_add_edge(g, "c", "d");
+  ASSERT_FALSE(graph_has_cycle(g));
+}
+
 UTEST(Graph, TopoOrder) {
     graph_t *g = graph_init();
     graph_add_edge(g, "a", "b");
