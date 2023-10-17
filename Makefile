@@ -7,6 +7,7 @@ CFLAGS_EXTRA=-Wall -Wextra -Wpedantic \
 	-Wredundant-decls -Wnested-externs -Wmissing-include-dirs \
 	-Wjump-misses-init -Wlogical-op
 EXEC=bake
+VALGRIND=valgrind --leak-check=yes
 
 SDIR=src
 BDIR=build
@@ -20,7 +21,8 @@ DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))
 _OBJ=tokenizer.o list.o rule.o parser.o e4c_lite.o map.o graph.o
 OBJ=$(patsubst %,$(BDIR)/%,$(_OBJ))
 
-TESTS=test_tokenizer test_list test_parser test_map test_graph
+_TESTS=test_tokenizer test_list test_parser test_map test_graph
+TESTS=$(patsubst %,$(BDIR)/%,$(_TESTS))
 
 # mkdir the build directory when Makefile is parsed
 $(shell mkdir -p $(BDIR))
@@ -35,18 +37,21 @@ $(EXEC): $(SDIR)/main.c $(OBJ)
 $(BDIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(CFLAGS_EXTRA) $(LIBS)
 
-run-tests: tests
-	@true
+run-tests: $(wildcard $(BDIR)/test_*)
+	@for file in $(TESTS); do \
+		echo "\n\nRunning $$file...\n"; \
+        $(VALGRIND) $$file; \
+    done
 
 # running tests
-run-test-%: test_%
-	valgrind --leak-check=yes $(BDIR)/test_$*
+run-test-%: $(BDIR)/test_%
+	$(VALGRIND) $(BDIR)/test_$*
 
 # compiling tests
 tests: $(TESTS)
 
-test_%: $(TDIR)/test_%.c $(OBJ) $(DEPS)
-	$(CC) -o $(BDIR)/$@ $(TDIR)/$@.c $(OBJ) $(CFLAGS) -g $(LIBS)
+$(BDIR)/test_%: $(TDIR)/test_%.c $(OBJ) $(DEPS)
+	$(CC) -o $@ $(TDIR)/test_$*.c $(OBJ) $(CFLAGS) -g $(LIBS)
 
 # clean the build directory
 .PHONY: clean
