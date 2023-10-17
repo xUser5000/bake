@@ -1,0 +1,14 @@
+A: B C
+	"true"
+	"echo 'A' >> A"
+
+
+B:
+	"echo 'B' >> B"
+
+
+C:
+	"echo 'C' >> C"
+
+outcast:
+	"echo 'outcast is executed'"
