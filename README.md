@@ -28,7 +28,7 @@ To compile Bake, you will need the following:
 # Compiling
 - To compile Bake, run `make` in the root directory of the project. The following binaries will be created in the `build` directory:
   - `bake` executable.
-  - some test binaries named `test_<testname>`
+  - some test binaries named `build/test_<testname>`
 - To generate debug symbols when compiling bake, run `make DEBUG=1`.
 - Run `make clean` in the root directory of the project to remove all build artifacts.
 
