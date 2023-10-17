@@ -1,6 +1,6 @@
 IDIR=include
 CC=gcc
-CFLAGS=-I$(IDIR)
+CFLAGS=-I$(IDIR) -g
 CFLAGS_EXTRA=-Wall -Wextra -Wpedantic \
 	-Wformat=2 -Wno-unused-parameter -Wshadow \
 	-Wwrite-strings -Wstrict-prototypes -Wold-style-definition \
@@ -10,7 +10,6 @@ EXEC=bake
 
 SDIR=src
 BDIR=build
-DDIR=build-debug
 TDIR=test
 
 LIBS=-lm -lpcre
@@ -18,47 +17,38 @@ LIBS=-lm -lpcre
 _DEPS=common.h tokenizer.h list.h rule.h parser.h e4c_lite.h map.h graph.h
 DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-OBJ=tokenizer.o list.o rule.o parser.o e4c_lite.o map.o graph.o
-BOBJ=$(patsubst %,$(BDIR)/%,$(OBJ))
+_OBJ=tokenizer.o list.o rule.o parser.o e4c_lite.o map.o graph.o
+OBJ=$(patsubst %,$(BDIR)/%,$(_OBJ))
 
 TESTS=test_tokenizer test_list test_parser test_map test_graph
-
-# add -g flag if "DEBUG" argument is passed
-ifeq ($(DEBUG), true)
-	CFLAGS += -g
-	BDIR = $(DDIR)
-endif
 
 # mkdir the build directory when Makefile is parsed
 $(shell mkdir -p $(BDIR))
 
-all: $(EXEC)
+all: $(EXEC) $(TESTS)
 
 # build executable
 $(EXEC): $(SDIR)/main.c $(OBJ)
-	$(CC) -o $(BDIR)/$@ $(SDIR)/main.c $(BOBJ) $(CFLAGS) $(CFLAGS_EXTRA) $(LIBS)
+	$(CC) -o $(BDIR)/$@ $(SDIR)/main.c $(OBJ) $(CFLAGS) $(CFLAGS_EXTRA) $(LIBS)
 
 # build object files from source files
-%.o: $(SDIR)/%.c $(DEPS)
-	$(CC) -c -o $(BDIR)/$@ $< $(CFLAGS) $(CFLAGS_EXTRA) $(LIBS)
+$(BDIR)/%.o: $(SDIR)/%.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(CFLAGS_EXTRA) $(LIBS)
+
+run-tests: tests
+	@true
 
 # running tests
-run-test:
+run-test-%: test_%
+	valgrind --leak-check=yes $(BDIR)/test_$*
 
 # compiling tests
-test: $(TESTS)
+tests: $(TESTS)
 
-test_%: test_dummy $(TDIR)/test_%.c $(OBJ) $(DEPS)
-	$(CC) -o $(BDIR)/$@ $(TDIR)/$@.c $(BOBJ) $(CFLAGS) $(LIBS)
-	$(BDIR)/$@
-
-# dummy rule to mark test targets out-of-date everytime they run
-.PHONY: test_dummy
-test_dummy:
-	@true
+test_%: $(TDIR)/test_%.c $(OBJ) $(DEPS)
+	$(CC) -o $(BDIR)/$@ $(TDIR)/$@.c $(OBJ) $(CFLAGS) -g $(LIBS)
 
 # clean the build directory
 .PHONY: clean
 clean:
 	rm -rf $(BDIR)
-	rm -rf $(DDIR)
