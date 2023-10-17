@@ -1,4 +1,8 @@
+# IDE files
 .idea
 .vscode
+.fleet
+
+# Build directories
 build
 build-debug
