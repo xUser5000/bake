@@ -26,15 +26,17 @@ To compile Bake, you will need the following:
   - To install: `sudo apt update && sudo apt install libpcre3 libpcre3-dev`
 
 # Compiling
-- To compile Bake, run `make` in the root directory of the project. This will create a `bake` executable in the `build` directory.
+- To compile Bake, run `make` in the root directory of the project. The following binaries will be created in the `build` directory:
+  - `bake` executable.
+  - some test binaries named `test_<testname>`
 - To generate debug symbols when compiling bake, run `make DEBUG=1`.
 - Run `make clean` in the root directory of the project to remove all build artifacts.
 
 
 # Testing
-- Run `make test` in the root directory of the project to run the test suite.
-- To run a particular test, run `make test_<testname>` (without the `.c` extension).
+- Run `make run-tests` in the root directory of the project to run the test suite.
+- To run a particular test, run `make run-test-<testname>` (without the `.c` extension).
 
 
 # Running
-- To run Bake, run `./build/bake <Bakefile>`.
+- To run Bake, run `./build/bake`. Note that this will execute `Bakefile` in the root of the project.
