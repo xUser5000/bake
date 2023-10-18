@@ -153,10 +153,24 @@ UTEST(Parser, NoCommands) {
 }
 
 
-UTEST(ParserTest, NoDependenciesNoRules) {
+UTEST(Parser, NoDependenciesNoRules) {
     char* test_string = "target : \n";
     FILE *ss = fmemopen(test_string, strlen(test_string), "r");
     tokenizer_t *tokenizer = tokenizer_init(ss);
     parser_t *parser = parser_init(tokenizer);
     ASSERT_THROWS(parser_get_rules(parser), EmptyRuleException);
+}
+
+UTEST(Parser, IgnoreEmptyLines) {
+  char *test_string = "A:B\n\t\n   \n";
+  FILE *ss = fmemopen(test_string, strlen(test_string), "r");
+  tokenizer_t *tokenizer = tokenizer_init(ss);
+  parser_t *parser = parser_init(tokenizer);
+
+  list_t *rules = parser_get_rules(parser);
+  rule_t *r = (rule_t *) rules->head->val;
+  char* pre = (char*) r->prerequisites->head->val;
+
+  ASSERT_STREQ(r->target, "A");
+  ASSERT_STREQ(pre, "B");
 }

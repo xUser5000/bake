@@ -1,10 +1,12 @@
+#include<stdio.h>
 #include<string.h>
 #include<pcre.h>
 
 #include "tokenizer.h"
 
-
 const char *TOKEN_PATTERNS[] = {NULL, NULL, "^[\\w-_.]+", "^:", "^\\n", "^\\t", "^\".+\"", "^[ ]+"};
+
+int is_blank(char *str);
 
 token_t* token_init(char *content, token_type_t type) {
     token_t *token = (token_t*) malloc(sizeof(token_t));
@@ -34,6 +36,12 @@ token_t* tokenizer_read_token(tokenizer_t *tokenizer) {
         }
         tokenizer->line_size = rv;
         tokenizer->line_number++;
+
+        if (is_blank(tokenizer->cur_line)) {
+            tokenizer->index = tokenizer->line_size;
+            return tokenizer_read_token(tokenizer);
+        }
+
         tokenizer->index = 0;
     }
 
@@ -72,3 +80,12 @@ token_t* tokenizer_read_token(tokenizer_t *tokenizer) {
 int tokenizer_get_line_number(tokenizer_t *tokenizer) { return tokenizer->line_number; }
 
 int tokenizer_get_index(tokenizer_t *tokenizer) { return tokenizer->index; }
+
+int is_blank(char *str) {
+    for (char *c = str; *c; c++) {
+        if (*c != '\n' && *c != ' ' && *c != '\t') {
+            return 0;
+        }
+    }
+    return 1;
+}
