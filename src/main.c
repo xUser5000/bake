@@ -64,6 +64,11 @@ int main(int argc, char* argv[]) {
         char *target = list_itr_next(order_itr);
         
         rule_t *rule = map_get(target_to_rule, target);
+        if (rule == NULL) {
+            printf("bake: target %s is not defined \n", target);
+            exit(1);
+        }
+
         list_itr_t *cmd_itr = list_itr_init(rule->commands);
         while (list_itr_has_next(cmd_itr)) {
             char *cmd = list_itr_next(cmd_itr);
