@@ -9,3 +9,5 @@ typedef struct rule_t {
 } rule_t;
 
 rule_t* rule_init(void);
+
+void rule_free(rule_t *rule);
