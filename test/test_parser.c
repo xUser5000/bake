@@ -18,10 +18,19 @@ UTEST(Parser, BasicScriptWithoutWhiteSpaces) {
     tokenizer_t *tokenizer = tokenizer_init(ss);
     parser_t *parser = parser_init(tokenizer);
 
-    rule_t *rule = (rule_t*) parser_get_rules(parser)->head->val;
+    list_t *rules = parser_get_rules(parser);
+    rule_t *rule = (rule_t*) rules->head->val;
     ASSERT_STREQ(rule->target, "target");
     ASSERT_STREQ((char*) rule->prerequisites->head->val, "dependency");
     ASSERT_STREQ((char*) rule->commands->head->val, "recipe");
+
+    rule_free(rule);
+    rules->head->val = NULL;
+
+    list_free(rules);
+    rules = NULL;
+
+    parser_free(parser);
 }
 
 UTEST(Parser, BasicScriptWithWhiteSpaces) {
@@ -30,10 +39,15 @@ UTEST(Parser, BasicScriptWithWhiteSpaces) {
     tokenizer_t *tokenizer = tokenizer_init(ss);
     parser_t *parser = parser_init(tokenizer);
 
-    rule_t *rule = (rule_t*) parser_get_rules(parser)->head->val;
+    list_t *rules = parser_get_rules(parser);
+    rule_t *rule = (rule_t*) rules->head->val;
     ASSERT_STREQ(rule->target, "target");
     ASSERT_STREQ((char*) rule->prerequisites->head->val, "dependency");
     ASSERT_STREQ((char*) rule->commands->head->val, "recipe");
+
+    rule_free(rule);
+    list_free(rules);
+    parser_free(parser);
 }
 
 
@@ -43,7 +57,8 @@ UTEST(Parser, MultipleDependenciesAndMultipleRecipes) {
     tokenizer_t *tokenizer = tokenizer_init(ss);
     parser_t *parser = parser_init(tokenizer);
 
-    rule_t *rule = (rule_t*) parser_get_rules(parser)->head->val;
+    list_t *rules = parser_get_rules(parser);
+    rule_t *rule = (rule_t*) rules->head->val;
     ASSERT_STREQ(rule->target, "target");
 
     char* arr1[] = {"dependency1", "dependency2"};
@@ -51,6 +66,10 @@ UTEST(Parser, MultipleDependenciesAndMultipleRecipes) {
 
     char* arr2[] = {"recipe1", "recipe2"};
     ASSERT_LIST_EQ(rule->commands, arr2);
+
+    rule_free(rule);
+    list_free(rules);
+    parser_free(parser);
 }
 
 
@@ -60,7 +79,9 @@ UTEST(Parser, InvalidScript) {
     tokenizer_t *tokenizer = tokenizer_init(ss);
     parser_t *parser = parser_init(tokenizer);
     
-    ASSERT_THROWS(parser_get_rules(parser), UnexpectedTokenException);
+    list_t *rules;
+    ASSERT_THROWS((rules = parser_get_rules(parser)), UnexpectedTokenException);
+
 }
 
 
@@ -84,6 +105,11 @@ UTEST(Parser, MultipleRules) {
     ASSERT_LIST_EQ(rule2->prerequisites, (char*[]) {"dependency2"});
     char* commands[] = {"recipe2", "recipe3"};
     ASSERT_LIST_EQ(rule2->commands, commands);
+
+    rule_free(rule1);
+    rule_free(rule2);
+    list_free(rules);
+    parser_free(parser);
 }
 
 UTEST(Parser, MultipleRulesWithEmptyLinesInBetween) {
@@ -106,6 +132,11 @@ UTEST(Parser, MultipleRulesWithEmptyLinesInBetween) {
     ASSERT_LIST_EQ(rule2->prerequisites, (char*[]) {"dependency2"});
     char* commands[] = {"recipe2", "recipe3"};
     ASSERT_LIST_EQ(rule2->commands, commands);
+
+    rule_free(rule1);
+    rule_free(rule2);
+    list_free(rules);
+    parser_free(parser);
 }
 
 
@@ -116,6 +147,7 @@ UTEST(Parser, NoRules) {
     parser_t *parser = parser_init(tokenizer);
 
     ASSERT_THROWS(parser_get_rules(parser), NoRulesProvidedException);
+
 }
 
 
@@ -133,6 +165,10 @@ UTEST(Parser, NoPrerequisites) {
     ASSERT_LIST_EQ(rule->prerequisites, (char*[]) {});
     char* commands[] = {"recipe1", "recipe2"};
     ASSERT_LIST_EQ(rule->commands, commands);
+
+    rule_free(rule);
+    list_free(rules);
+    parser_free(parser);
 }
 
 
@@ -150,6 +186,10 @@ UTEST(Parser, NoCommands) {
     char* dependencies[] = {"dependency1", "dependency2"};
     ASSERT_LIST_EQ(rule->prerequisites, dependencies);
     ASSERT_LIST_EQ(rule->commands, (char* []) {});
+
+    rule_free(rule);
+    list_free(rules);
+    parser_free(parser);
 }
 
 
@@ -159,6 +199,7 @@ UTEST(Parser, NoDependenciesNoRules) {
     tokenizer_t *tokenizer = tokenizer_init(ss);
     parser_t *parser = parser_init(tokenizer);
     ASSERT_THROWS(parser_get_rules(parser), EmptyRuleException);
+
 }
 
 UTEST(Parser, IgnoreEmptyLines) {
@@ -173,4 +214,8 @@ UTEST(Parser, IgnoreEmptyLines) {
 
   ASSERT_STREQ(r->target, "A");
   ASSERT_STREQ(pre, "B");
+
+  rule_free(r);
+  list_free(rules);
+  parser_free(parser);
 }

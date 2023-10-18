@@ -17,3 +17,5 @@ typedef struct parser_t {
 parser_t* parser_init(tokenizer_t *tokenizer);
 
 list_t* parser_get_rules(parser_t *parser);
+
+void parser_free(parser_t *parser);
