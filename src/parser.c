@@ -79,7 +79,9 @@ rule_t* rule(parser_t *parser) {
     endline(parser);
     r->commands = command_list(parser);
     if (list_size(r->prerequisites) == 0 && list_size(r->commands) == 0) {
-        E4C_THROW(EmptyRuleException, NULL);
+        char buff[100];
+        sprintf(buff, "bake: rule %s is empty!", r->target);
+        E4C_THROW(EmptyRuleException, buff);
     }
     return r;
 }
