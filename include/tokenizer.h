@@ -24,6 +24,8 @@ typedef struct token_t {
 
 token_t* token_init(char *content, token_type_t type);
 
+void token_free(token_t *token);
+
 tokenizer_t* tokenizer_init(FILE *in);
 
 token_t* tokenizer_read_token(tokenizer_t *tokenizer);
@@ -31,3 +33,5 @@ token_t* tokenizer_read_token(tokenizer_t *tokenizer);
 int tokenizer_get_line_number(tokenizer_t *tokenizer);
 
 int tokenizer_get_index(tokenizer_t *tokenizer);
+
+void tokenizer_free(tokenizer_t *tokenizer);
