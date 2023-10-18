@@ -37,13 +37,14 @@ $(EXEC): $(SDIR)/main.c $(OBJ)
 $(BDIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(CFLAGS_EXTRA) $(LIBS)
 
-run-tests: $(wildcard $(BDIR)/test_*)
+# run all tests
+run-tests: $(TESTS)
 	@for file in $(TESTS); do \
 		echo "\n\nRunning $$file...\n"; \
         $(VALGRIND) $$file; \
     done
 
-# running tests
+# run a particular test
 run-test-%: $(BDIR)/test_%
 	$(VALGRIND) $(BDIR)/test_$*
 
