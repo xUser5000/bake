@@ -38,7 +38,7 @@ size_t list_size(list_t *list);
 
 int list_is_empty(list_t *list);
 
-void list_free(list_t *list, int free_vals);
+void list_free(list_t *list);
 
 list_itr_t* list_itr_init(list_t *list);
 

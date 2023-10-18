@@ -109,11 +109,11 @@ void graph_reverse(graph_t *graph, graph_t *reversed_graph) {
         }
 
         list_itr_free(children_itr);
-        list_free(children, 0);
+        list_free(children);
     }
 
     list_itr_free(nodes_itr);
-    list_free(nodes, 0);
+    list_free(nodes);
 }
 
 void graph_free(graph_t *graph) {
@@ -121,11 +121,11 @@ void graph_free(graph_t *graph) {
     list_itr_t *it = list_itr_init(nodes);
     while (list_itr_has_next(it)) {
         char *node = (char*) list_itr_next(it);
-        list_free(map_get(graph->adj, node), 0);
+        list_free(map_get(graph->adj, node));
         map_set(graph->adj, node, NULL);
     }
     list_itr_free(it);
-    list_free(nodes, 0);
+    list_free(nodes);
     map_free(graph->adj);
     free(graph);
 }
@@ -145,5 +145,5 @@ void graph_print(graph_t *graph) {
         list_itr_free(children_itr);
     }
     list_itr_free(nodes_itr);
-    list_free(nodes, 0);
+    list_free(nodes);
 }

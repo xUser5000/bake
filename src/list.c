@@ -86,12 +86,11 @@ int list_is_empty(list_t *list) {
     return list->size == 0;
 }
 
-void list_free(list_t *list, int free_vals) {
+void list_free(list_t *list) {
     node_t *cur = list->head;
     while (cur != NULL) {
         node_t *tmp = cur;
         cur = cur->next;
-        if (free_vals) free(tmp->val);
         free(tmp);
     }
     free(list);

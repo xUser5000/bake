@@ -25,7 +25,7 @@ UTEST(List, ListPushBack) {
     ASSERT_FALSE(list_itr_has_next(it));
 
     list_itr_free(it);
-    list_free(list, 0);
+    list_free(list);
 }
 
 UTEST(List, ListPopBack) {
@@ -44,7 +44,7 @@ UTEST(List, ListPopBack) {
 
     ASSERT_THROWS(list_pop_back(list), EmptyListException);
     
-    list_free(list, 0);
+    list_free(list);
 }
 
 UTEST(List, ListPushFront) {
@@ -66,7 +66,7 @@ UTEST(List, ListPushFront) {
     ASSERT_FALSE(list_itr_has_next(it));
     
     list_itr_free(it);
-    list_free(list, 0);
+    list_free(list);
 }
 
 UTEST(List, ListPopFront) {
@@ -85,5 +85,5 @@ UTEST(List, ListPopFront) {
 
     ASSERT_THROWS(list_pop_front(list), EmptyListException);
     
-    list_free(list, 0);
+    list_free(list);
 }
