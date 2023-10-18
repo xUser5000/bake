@@ -43,7 +43,9 @@ list_t* parser_get_rules(parser_t *parser) {
 
 token_t* consume(parser_t *parser, token_type_t token_type) {
     if (parser->lookahead->type != token_type) {
-        E4C_THROW(UnexpectedTokenException, NULL);
+        char buff[100];
+        sprintf(buff, "bake: unexpected token on line %zu", parser->tokenizer->line_number + 1);
+        E4C_THROW(UnexpectedTokenException, buff);
     }
     token_t *res = parser->lookahead;
     parser->lookahead = tokenizer_read_token(parser->tokenizer);

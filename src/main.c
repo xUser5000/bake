@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 
+#include "e4c_lite.h"
 #include "tokenizer.h"
 #include "parser.h"
 #include "graph.h"
@@ -21,7 +22,15 @@ int main(int argc, char* argv[]) {
 
     tokenizer_t *tokenizer = tokenizer_init(makefile);
     parser_t *parser = parser_init(tokenizer);
-    list_t *rules = parser_get_rules(parser);
+
+    // parse the bakefile and extract rules
+    list_t *rules = NULL;
+    E4C_TRY {
+        rules = parser_get_rules(parser);
+    } E4C_CATCH(ParserException) {
+        printf("%s\n", E4C_EXCEPTION.message);
+        exit(1);
+    }
 
     map_t *target_to_rule = map_init();
     graph_t *graph = graph_init();
