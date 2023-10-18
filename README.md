@@ -2,14 +2,11 @@
 Bake is an eductaional clone of GNU Make written in C. The aim of the project is to learn more about C, build systems, tokenization, parsing, graph theory, parallel computation, and more!
 
 # Features
-- [x] Parses a Bakefile and shows syntax errors
-- [x] Executes all targets in a Bakefile
+- [x] Execute all targets in a Bakefile
 - [x] Specify a single target to execute
 - [x] Detect and report cycles in the dependency graph
 
 # TODO
-- [ ] Improve the readability of error messages
-- [ ] Make the parser more tolerant of whitespace and tabs
 - [ ] Check the entire dependency graph for cycles not just the target subgraph
 - [ ] Raise an error when target is not defined
 - [ ] Pay more attention to memory management
