@@ -6,7 +6,7 @@
 #include "list.h"
 #include "map.h"
 
-void graph_reverse(graph_t *graph, graph_t *reversed_graph);
+graph_t* graph_reverse(graph_t *graph);
 void graph_dfs(graph_t *graph, char *node, map_t *visisted, list_t *list);
 int graph_has_cycle_internal(graph_t *graph, char *node, map_t *visited, map_t *instack);
 
@@ -79,8 +79,7 @@ list_t* graph_topo_order(graph_t *graph, char *root) {
     list_t *topo_order = list_init();
 
     /* Reverse the subgraph rooted at (char *root) */
-    graph_t *reversed_graph = graph_init();
-    graph_reverse(graph, reversed_graph);
+    graph_t *reversed_graph = graph_reverse(graph);
 
     /* Perform Topological ordering */
     map_t *visited = map_init();
@@ -107,7 +106,8 @@ void graph_dfs(graph_t *graph, char *node, map_t *visited, list_t *list) {
     list_push_back(list, node);
 }
 
-void graph_reverse(graph_t *graph, graph_t *reversed_graph) {
+graph_t* graph_reverse(graph_t *graph) {
+    graph_t *reversed_graph = graph_init();
     list_t *nodes = map_keys(graph->adj);
     list_itr_t *nodes_itr = list_itr_init(nodes);
     while (list_itr_has_next(nodes_itr)) {
@@ -128,6 +128,7 @@ void graph_reverse(graph_t *graph, graph_t *reversed_graph) {
 
     list_itr_free(nodes_itr);
     list_free(nodes);
+    return reversed_graph;
 }
 
 void graph_free(graph_t *graph) {
