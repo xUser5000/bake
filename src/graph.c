@@ -1,7 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include <string.h>
+#include<string.h>
 
+#include "rule.h"
 #include "graph.h"
 #include "list.h"
 #include "map.h"
@@ -129,6 +130,30 @@ graph_t* graph_reverse(graph_t *graph) {
     list_itr_free(nodes_itr);
     list_free(nodes);
     return reversed_graph;
+}
+
+void graph_run(graph_t *graph, map_t *target_to_rule, char *root_target) {
+  list_t *order = graph_topo_order(graph, root_target);
+  list_itr_t *order_itr = list_itr_init(order);
+  while (list_itr_has_next(order_itr)) {
+    char *target = list_itr_next(order_itr);
+
+    rule_t *rule = map_get(target_to_rule, target);
+    if (rule == NULL) {
+      printf("bake: target %s is not defined \n", target);
+      exit(1);
+    }
+
+    list_itr_t *cmd_itr = list_itr_init(rule->commands);
+    while (list_itr_has_next(cmd_itr)) {
+      char *cmd = list_itr_next(cmd_itr);
+      printf("%s\n", cmd);
+      int rc = system(cmd);
+      if (rc != 0) {
+        break;
+      }
+    }
+  }
 }
 
 void graph_free(graph_t *graph) {

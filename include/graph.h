@@ -19,6 +19,8 @@ int graph_has_cycle(graph_t *graph);
 
 list_t* graph_topo_order(graph_t *graph, char *root);
 
+void graph_run(graph_t *graph, map_t *target_to_rule, char *root_target);
+
 void graph_free(graph_t *graph);
 
 void graph_print(graph_t *graph);

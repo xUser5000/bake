@@ -3,6 +3,7 @@
 #include<string.h>
 
 #include "e4c_lite.h"
+#include "list.h"
 #include "tokenizer.h"
 #include "parser.h"
 #include "graph.h"
@@ -49,6 +50,8 @@ int main(int argc, char* argv[]) {
             graph_add_edge(graph, pre, rule->target);
         }
     }
+    list_itr_free(rules_itr);
+    rules_itr = NULL;
 
     // if graph has a cycle, report and exit
     if (graph_has_cycle(graph)) {
@@ -58,27 +61,18 @@ int main(int argc, char* argv[]) {
 
     // execute target and its prerequisites in topological order
     char *root_target = (argc == 2) ? argv[1] : ((rule_t*) rules->head->val)->target;
-    list_t *order = graph_topo_order(graph, root_target);
-    list_itr_t *order_itr = list_itr_init(order);
-    while (list_itr_has_next(order_itr)) {
-        char *target = list_itr_next(order_itr);
-        
-        rule_t *rule = map_get(target_to_rule, target);
-        if (rule == NULL) {
-            printf("bake: target %s is not defined \n", target);
-            exit(1);
-        }
+    graph_run(graph, target_to_rule, root_target);
 
-        list_itr_t *cmd_itr = list_itr_init(rule->commands);
-        while (list_itr_has_next(cmd_itr)) {
-            char *cmd = list_itr_next(cmd_itr);
-            printf("%s\n", cmd);
-            int rc = system(cmd);
-            if (rc != 0) {
-                break;
-            }
-        }
+    rules_itr = list_itr_init(rules);
+    while (list_itr_has_next(rules_itr)) {
+        rule_t *rule = list_itr_next(rules_itr);
+        rule_free(rule);
     }
+    list_itr_free(rules_itr);
+    
+    list_free(rules);
+    map_free(target_to_rule);
+    graph_free(graph);
 
     return 0;
 }
