@@ -29,6 +29,10 @@ $(shell mkdir -p $(BDIR))
 
 all: $(EXEC) $(TESTS)
 
+# run executable
+run: $(EXEC)
+	$(BDIR)/$(EXEC)
+
 # build executable
 $(EXEC): $(SDIR)/main.c $(OBJ)
 	$(CC) -o $(BDIR)/$@ $(SDIR)/main.c $(OBJ) $(CFLAGS) $(CFLAGS_EXTRA) $(LIBS)
