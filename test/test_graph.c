@@ -23,12 +23,16 @@ UTEST(Graph, HasCycle) {
   graph_add_edge(g, "b", "c");
   graph_add_edge(g, "c", "a");
   ASSERT_TRUE(graph_has_cycle(g));
+  graph_free(g);
+  g = NULL;
 
   g = graph_init();
   graph_add_edge(g, "a", "b");
   graph_add_edge(g, "b", "c");
   graph_add_edge(g, "c", "d");
   ASSERT_FALSE(graph_has_cycle(g));
+
+  graph_free(g);
 }
 
 UTEST(Graph, TopoOrder) {
@@ -48,4 +52,6 @@ UTEST(Graph, TopoOrder) {
     ASSERT_EQ(list_size(order), 7);
     ASSERT_LIST_EQ(order, expected_order);
 
+    list_free(order);
+    graph_free(g);
 }

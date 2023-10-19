@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include <string.h>
 
 #include "graph.h"
 #include "list.h"
@@ -36,8 +37,16 @@ list_t* graph_get_children(graph_t *graph, char *u) {
 int graph_has_cycle(graph_t *graph) {
     map_t *visited = map_init();
     map_t *instack = map_init();
-    char *random_node = map_keys(graph->adj)->head->val;
-    return graph_has_cycle_internal(graph, random_node, visited, instack);
+
+    list_t *nodes = map_keys(graph->adj);
+    char *random_node = nodes->head->val;
+    list_free(nodes);
+
+    int ret = graph_has_cycle_internal(graph, random_node, visited, instack);
+    map_free(visited);
+    map_free(instack);
+
+    return ret;
 }
 
 int graph_has_cycle_internal(graph_t *graph, char *node, map_t *visited, map_t *instack) {
@@ -51,15 +60,18 @@ int graph_has_cycle_internal(graph_t *graph, char *node, map_t *visited, map_t *
   while (list_itr_has_next(children_itr)) {
     char *child = (char*) list_itr_next(children_itr);
     if (map_get(instack, child)) {
-      return 1;
+      ans = 1;
+      break;
     }
     if (map_get(visited, child)) {
       continue;
     }
     ans = ans || graph_has_cycle_internal(graph, child, visited, instack);
   }
+  list_itr_free(children_itr);
 
   map_set(instack, node, 0);
+
   return ans;
 }
 
@@ -73,6 +85,7 @@ list_t* graph_topo_order(graph_t *graph, char *root) {
     /* Perform Topological ordering */
     map_t *visited = map_init();
     graph_dfs(reversed_graph, root, visited, topo_order);
+    graph_free(reversed_graph);
     map_free(visited);
 
     return topo_order;
@@ -89,6 +102,7 @@ void graph_dfs(graph_t *graph, char *node, map_t *visited, list_t *list) {
             graph_dfs(graph, child, visited, list);
         }
     }
+    list_itr_free(children_itr);
 
     list_push_back(list, node);
 }
@@ -109,7 +123,7 @@ void graph_reverse(graph_t *graph, graph_t *reversed_graph) {
         }
 
         list_itr_free(children_itr);
-        list_free(children);
+        children = NULL;
     }
 
     list_itr_free(nodes_itr);
