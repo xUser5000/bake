@@ -10,6 +10,7 @@
 graph_t* graph_reverse(graph_t *graph);
 void graph_dfs(graph_t *graph, char *node, map_t *visisted, list_t *list);
 int graph_has_cycle_internal(graph_t *graph, char *node, map_t *visited, map_t *instack);
+int graph_run_internal(graph_t *graph, map_t *node, char *root_target, map_t *visited);
 
 graph_t* graph_init(void) {
     graph_t *graph = malloc(sizeof(graph_t));
@@ -133,27 +134,29 @@ graph_t* graph_reverse(graph_t *graph) {
 }
 
 void graph_run(graph_t *graph, map_t *target_to_rule, char *root_target) {
-  list_t *order = graph_topo_order(graph, root_target);
-  list_itr_t *order_itr = list_itr_init(order);
-  while (list_itr_has_next(order_itr)) {
-    char *target = list_itr_next(order_itr);
+  graph_t *reversed_graph = graph_reverse(graph);
+  map_t *visited = map_init();
+  graph_run_internal(reversed_graph, target_to_rule, root_target, visited);
+  map_free(visited);
+  graph_free(reversed_graph);
+}
 
-    rule_t *rule = map_get(target_to_rule, target);
-    if (rule == NULL) {
-      printf("bake: target %s is not defined \n", target);
-      exit(1);
-    }
+int graph_run_internal(graph_t *graph, map_t *target_to_rule, char *node, map_t *visited) {
+  map_set(visited, node, (void*) 1);
+  rule_t *target_rule = map_get(target_to_rule, node);
 
-    list_itr_t *cmd_itr = list_itr_init(rule->commands);
-    while (list_itr_has_next(cmd_itr)) {
-      char *cmd = list_itr_next(cmd_itr);
-      printf("%s\n", cmd);
-      int rc = system(cmd);
-      if (rc != 0) {
-        break;
-      }
+  list_t *children = graph_get_children(graph, node);
+  list_itr_t *children_itr = list_itr_init(children);
+  while (list_itr_has_next(children_itr)) {
+    char *child = (char*) list_itr_next(children_itr);
+    if (map_get(visited, child) == NULL) {
+      int exec_status = graph_run_internal(graph, target_to_rule, child, visited);
+      if (exec_status == 0) return 0;
     }
   }
+  list_itr_free(children_itr);
+
+  return rule_execute(target_rule);
 }
 
 void graph_free(graph_t *graph) {
