@@ -136,9 +136,11 @@ list_t* command_list(parser_t *parser) {
         free(endline(parser));
     }
     if (parser->lookahead->type == WHITE_SPACE) {
+        char buff[100];
+        sprintf(buff, "bake: Unexpected whitespace on line %zu", parser->tokenizer->line_number + 1);
         list_free(list);
         parser_free(parser);
-        E4C_THROW(UnexpectedTokenException, "Unexpected whitespace");
+        E4C_THROW(UnexpectedTokenException, buff);
     }
     return list;
 }
