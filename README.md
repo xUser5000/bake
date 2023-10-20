@@ -6,9 +6,9 @@ Bake is an eductaional clone of GNU Make written in C. The aim of the project is
 - [x] Specify a single target to execute
 - [x] Detect and report cycles in the dependency graph
 - [x] Raise an error when target is not defined
+- [x] Avoid re-executing targets that are up to date
 
 # TODO
-- [ ] Avoid re-executing targets that are up to date
 - [ ] Parallelize target execution
 
 # Installing Dependencies
