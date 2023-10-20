@@ -10,6 +10,4 @@ typedef struct rule_t {
 
 rule_t* rule_init(void);
 
-int rule_execute(rule_t *rule);
-
 void rule_free(rule_t *rule);

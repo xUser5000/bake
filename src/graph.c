@@ -10,6 +10,7 @@
 #include "graph.h"
 #include "list.h"
 #include "map.h"
+#include "run.h"
 
 graph_t* graph_reverse(graph_t *graph);
 void graph_dfs(graph_t *graph, char *node, map_t *visisted, list_t *list);
@@ -179,7 +180,7 @@ int graph_run_internal(graph_t *graph, map_t *target_to_rule, char *node, map_t 
       printf("bake: target %s is not defined\n", node);
       exit(1);
     }
-    return rule_execute(node_rule);
+    return run(node_rule);
   }
 
   return 1;
