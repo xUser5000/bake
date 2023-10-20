@@ -1,14 +1,16 @@
 A: B C
-	"true"
 	"echo 'A' >> A"
 
 
-B:
+B: D
 	"echo 'B' >> B"
 
 
 C:
 	"echo 'C' >> C"
 
-outcast:
-	"echo 'outcast is executed'"
+D:
+	"echo 'D' >> D"
+
+clean:
+	"rm -rf A B C D"
