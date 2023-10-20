@@ -87,6 +87,7 @@ int list_is_empty(list_t *list) {
 }
 
 void list_free(list_t *list) {
+    if (list == NULL) return;
     node_t *cur = list->head;
     while (cur != NULL) {
         node_t *tmp = cur;

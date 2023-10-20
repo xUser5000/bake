@@ -17,6 +17,7 @@ token_t* token_init(char *content, token_type_t type) {
 }
 
 void token_free(token_t *token) {
+  if (token == NULL) return;
   free(token->content);
   free(token);
 }

@@ -160,6 +160,7 @@ int graph_run_internal(graph_t *graph, map_t *target_to_rule, char *node, map_t 
 }
 
 void graph_free(graph_t *graph) {
+    if (graph == NULL) return;
     list_t *nodes = map_keys(graph->adj);
     list_itr_t *it = list_itr_init(nodes);
     while (list_itr_has_next(it)) {

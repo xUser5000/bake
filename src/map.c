@@ -65,6 +65,7 @@ list_t *map_keys(map_t *map) {
 }
 
 void map_free(map_t *map) {
+    if (map == NULL) return;
     list_itr_t *itr = list_itr_init(map->list);
     while (list_itr_has_next(itr)) {
         pair_t *p = list_itr_next(itr);

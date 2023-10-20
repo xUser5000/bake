@@ -46,6 +46,7 @@ list_t* parser_get_rules(parser_t *parser) {
 }
 
 void parser_free(parser_t *parser) {
+  if (parser == NULL) return;
   token_free(parser->lookahead);
   tokenizer_free(parser->tokenizer);
   free(parser);

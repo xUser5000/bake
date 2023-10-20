@@ -27,6 +27,7 @@ int rule_execute(rule_t *rule) {
 }
 
 void rule_free(rule_t *rule) {
+  if (rule == NULL) return;
   free(rule->target);
 
   list_itr_t *it = list_itr_init(rule->prerequisites);
