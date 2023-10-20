@@ -150,7 +150,6 @@ void graph_run(graph_t *graph, map_t *target_to_rule, char *root_target) {
 
 int graph_run_internal(graph_t *graph, map_t *target_to_rule, char *node, map_t *visited) {
   map_set(visited, node, (void*) 1);
-  rule_t *node_rule = map_get(target_to_rule, node);
 
   int out_of_date = !is_file(node);
 
@@ -175,6 +174,11 @@ int graph_run_internal(graph_t *graph, map_t *target_to_rule, char *node, map_t 
 
   // if out-of-date, build target
   if (out_of_date) {
+    rule_t *node_rule = map_get(target_to_rule, node);
+    if (node_rule == NULL) {
+      printf("bake: target %s is not defined\n", node);
+      exit(1);
+    }
     return rule_execute(node_rule);
   }
 
