@@ -1,6 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<time.h>
+#include<unistd.h>
 
 #include "rule.h"
 #include "graph.h"
@@ -11,6 +15,9 @@ graph_t* graph_reverse(graph_t *graph);
 void graph_dfs(graph_t *graph, char *node, map_t *visisted, list_t *list);
 int graph_has_cycle_internal(graph_t *graph, char *node, map_t *visited, map_t *instack);
 int graph_run_internal(graph_t *graph, map_t *node, char *root_target, map_t *visited);
+int is_file(char *pathname);
+int mod_time_less(char *file1, char *file2);
+
 
 graph_t* graph_init(void) {
     graph_t *graph = malloc(sizeof(graph_t));
@@ -143,7 +150,9 @@ void graph_run(graph_t *graph, map_t *target_to_rule, char *root_target) {
 
 int graph_run_internal(graph_t *graph, map_t *target_to_rule, char *node, map_t *visited) {
   map_set(visited, node, (void*) 1);
-  rule_t *target_rule = map_get(target_to_rule, node);
+  rule_t *node_rule = map_get(target_to_rule, node);
+
+  int out_of_date = !is_file(node);
 
   list_t *children = graph_get_children(graph, node);
   list_itr_t *children_itr = list_itr_init(children);
@@ -152,11 +161,42 @@ int graph_run_internal(graph_t *graph, map_t *target_to_rule, char *node, map_t 
     if (map_get(visited, child) == NULL) {
       int exec_status = graph_run_internal(graph, target_to_rule, child, visited);
       if (exec_status == 0) return 0;
+
+      if (
+          !is_file(node) ||
+          !is_file(child) ||
+          mod_time_less(node, child)
+      ) {
+        out_of_date = 1;
+      }
     }
   }
   list_itr_free(children_itr);
 
-  return rule_execute(target_rule);
+  // if out-of-date, build target
+  if (out_of_date) {
+    return rule_execute(node_rule);
+  }
+
+  return 1;
+}
+
+int is_file(char *pathname) {
+  struct stat sb;
+  return stat(pathname, &sb) == 0 && S_ISREG(sb.st_mode);
+}
+
+int mod_time_less(char *file1, char *file2) {
+  struct stat sb1;
+  struct stat sb2;
+  if (stat(file1, &sb1) == 1) return 0;
+  if (stat(file2, &sb2) == 1) return 0;
+  struct timespec t1 = sb1.st_mtim;
+  struct timespec t2 = sb2.st_mtim;
+
+  if (t1.tv_sec != t2.tv_sec) return t1.tv_sec < t2.tv_sec;
+  if (t1.tv_nsec != t2.tv_nsec) return t1.tv_nsec < t2.tv_nsec;
+  return 0;
 }
 
 void graph_free(graph_t *graph) {
