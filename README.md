@@ -9,7 +9,10 @@ Bake is an eductaional clone of GNU Make written in C. The aim of the project is
 - [x] Avoid re-executing targets that are up to date
 
 # TODO
-- [ ] Parallelize target execution
+- [ ] Parallelize target execution using `pthread`
+- [ ] Implement a thread pool
+- [ ] Add support for variables
+- [ ] Dockerize bake
 
 # Installing Dependencies
 Bake is only supported on Linux. It has been tested on Ubuntu 20.04 LTS.
