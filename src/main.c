@@ -4,6 +4,7 @@
 
 #include "e4c_lite.h"
 #include "list.h"
+#include "map.h"
 #include "tokenizer.h"
 #include "parser.h"
 #include "graph.h"
@@ -61,6 +62,11 @@ int main(int argc, char* argv[]) {
 
     // execute target and its prerequisites in topological order
     char *root_target = (argc == 2) ? argv[1] : ((rule_t*) rules->head->val)->target;
+    if (map_get(target_to_rule, root_target) == NULL) {
+      printf("bake: rule \"%s\" is not defined\n", root_target);
+      exit(1);
+    }
+
     graph_run(graph, target_to_rule, root_target);
 
     rules_itr = list_itr_init(rules);
