@@ -13,7 +13,7 @@ SDIR=src
 BDIR=build
 TDIR=test
 
-LIBS=-lm -lpcre
+LIBS=-lm -lpcre -pthread
 
 _DEPS=common.h tokenizer.h list.h rule.h parser.h e4c_lite.h map.h graph.h run.h
 DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))

@@ -5,6 +5,7 @@
 #include<sys/stat.h>
 #include<time.h>
 #include<unistd.h>
+#include<pthread.h>
 
 #include "rule.h"
 #include "graph.h"
@@ -12,11 +13,26 @@
 #include "map.h"
 #include "run.h"
 
+typedef struct run_data_t {
+  graph_t *graph;
+  map_t *target_to_rule;
+  char *node;
+  map_t *visited;
+  int exec_status;
+} run_data_t;
+
 graph_t* graph_reverse(graph_t *graph);
+
 void graph_dfs(graph_t *graph, char *node, map_t *visisted, list_t *list);
+
 int graph_has_cycle_internal(graph_t *graph, char *node, map_t *visited, map_t *instack);
-int graph_run_internal(graph_t *graph, map_t *node, char *root_target, map_t *visited);
+
+int graph_run_internal(graph_t *graph, map_t *target_to_rule, char *node, map_t *visited);
+
+void *graph_run_internal_wrapper(void *arg);
+
 int is_file(char *pathname);
+
 int mod_time_less(char *file1, char *file2);
 
 
@@ -152,21 +168,57 @@ void graph_run(graph_t *graph, map_t *target_to_rule, char *root_target) {
 int graph_run_internal(graph_t *graph, map_t *target_to_rule, char *node, map_t *visited) {
   map_set(visited, node, (void*) 1);
 
-  int out_of_date = !is_file(node);
-
   list_t *children = graph_get_children(graph, node);
+  list_t *threads = list_init();
+  list_t *objects = list_init();
+
   list_itr_t *children_itr = list_itr_init(children);
   while (list_itr_has_next(children_itr)) {
     char *child = (char*) list_itr_next(children_itr);
     if (map_get(visited, child) == NULL) {
-      int exec_status = graph_run_internal(graph, target_to_rule, child, visited);
-      if (exec_status == 0) return 0;
+      run_data_t *obj = (run_data_t*) malloc(sizeof(run_data_t));
+      obj->graph = graph;
+      obj->target_to_rule = target_to_rule;
+      obj->node = child;
+      obj->visited = visited;
 
+      pthread_t *th = (pthread_t*) malloc(sizeof(pthread_t));
+      pthread_create(th, NULL, graph_run_internal_wrapper, obj);
+//      pthread_join(th, NULL);
+
+      list_push_back(threads, th);
+      list_push_back(objects, &obj);
+    }
+  }
+  list_itr_free(children_itr);
+
+  // wait for all threads to finish
+  list_itr_t *threads_itr = list_itr_init(threads);
+  while (list_itr_has_next(threads_itr)) {
+    pthread_t *th = (pthread_t*) list_itr_next(threads_itr);
+    pthread_join(*th, NULL);
+  }
+  list_itr_free(threads_itr);
+
+  // if at least one child failed, abort the whole process
+  list_itr_t *objects_itr = list_itr_init(objects);
+  while (list_itr_has_next(objects_itr)) {
+    run_data_t *obj = list_itr_next(objects_itr);
+    if (obj->exec_status == 0) return 0;
+  }
+  list_itr_free(objects_itr);
+
+  // determine if target is out of date
+  int out_of_date = !is_file(node);
+  children_itr = list_itr_init(children);
+  while (list_itr_has_next(children_itr)) {
+    char *child = (char*) list_itr_next(children_itr);
+    if (map_get(visited, child) == NULL) {
       if (
           !is_file(node) ||
           !is_file(child) ||
           mod_time_less(node, child)
-      ) {
+          ) {
         out_of_date = 1;
       }
     }
@@ -184,6 +236,19 @@ int graph_run_internal(graph_t *graph, map_t *target_to_rule, char *node, map_t 
   }
 
   return 1;
+}
+
+
+void *graph_run_internal_wrapper(void *arg) {
+  run_data_t *data = (run_data_t *) arg;
+  int exec_status = graph_run_internal(
+      data->graph,
+      data->target_to_rule,
+      data->node,
+      data->visited
+      );
+  data->exec_status = exec_status;
+  return NULL;
 }
 
 int is_file(char *pathname) {
