@@ -7,9 +7,10 @@ Bake is an eductaional clone of GNU Make written in C. The aim of the project is
 - [x] Detect and report cycles in the dependency graph
 - [x] Raise an error when target is not defined
 - [x] Avoid re-executing targets that are up to date
+- [x] Concurrent target execution (using `pthread`)
 
 # TODO
-- [ ] Parallelize target execution using `pthread`
+- [ ] Test concurrent modifications to the file system (somehow xD)
 - [ ] Implement a thread pool
 - [ ] Add support for variables
 - [ ] Dockerize bake
